@@ -21,6 +21,8 @@
         <module>junit-platform-manager-base-8</module>
         <module>junit-platform-manager-java-11</module>
         <module>junit-platform-manager</module>
+
+        <module>junit-platform-manager-tests</module>
     </modules>
 
     <dependencies>

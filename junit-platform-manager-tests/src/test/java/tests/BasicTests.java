@@ -11,7 +11,13 @@ class BasicTests {
   void gradle() {
     var result = new Tests().gradle("basic");
 
-    var expectedLines = List.of(">> BEGIN >>", ".* BUILD SUCCESSFUL in \\d+s", ">> END. >>");
+    var expectedLines =
+        List.of(
+            ">> BEGIN >>",
+            ".* basic.ApplicationTests PASSED",
+            ">> MORE LINES >>",
+            ".* BUILD SUCCESSFUL in \\d+s",
+            ">> END. >>");
     assertLinesMatch(expectedLines, result.getOutputLines("out"));
   }
 
@@ -19,7 +25,13 @@ class BasicTests {
   void maven() {
     var result = new Tests().maven("basic");
 
-    var expectedLines = List.of(">> BEGIN >>", "[INFO] BUILD SUCCESS", ">> END. >>");
+    var expectedLines =
+        List.of(
+            ">> BEGIN >>",
+            "[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0",
+            ">> MORE LINES >>",
+            "[INFO] BUILD SUCCESS",
+            ">> END. >>");
     assertLinesMatch(expectedLines, result.getOutputLines("out"));
   }
 }

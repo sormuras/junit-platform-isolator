@@ -53,11 +53,15 @@ class Tests {
 
     var result = tool.run(configuration.build());
 
+    if (result.isTimedOut()) {
+      writeLogs(workspace, result);
+      throw new AssertionError("Timed-out: " + configuration.getTimeout());
+    }
+
     if (result.getExitCode() != expectedExitCode) {
-      System.out.printf(
-          "Expected exit code of %d, got: %d", expectedExitCode, result.getExitCode());
-      result.getOutputLines("out").forEach(System.out::println);
-      result.getOutputLines("err").forEach(System.err::println);
+      writeLogs(workspace, result);
+      throw new AssertionError(
+          "Expected exit code of " + expectedExitCode + ", but got: %d" + result.getExitCode());
     }
 
     return result;
@@ -76,6 +80,15 @@ class Tests {
       Files.writeString(path, target);
     } catch (IOException e) {
       throw new UncheckedIOException("Replacing placeholders failed!", e);
+    }
+  }
+
+  void writeLogs(Path directory, Result result) {
+    try {
+      Files.write(directory.resolve("run-err.log"), result.getOutputLines("err"));
+      Files.write(directory.resolve("run-out.log"), result.getOutputLines("out"));
+    } catch (IOException e) {
+      // ignore
     }
   }
 }

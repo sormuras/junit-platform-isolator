@@ -57,13 +57,12 @@ class Tests {
 
     var result = tool.run(configuration.build());
 
+    writeLogs(workspace, result);
+
     if (result.isTimedOut()) {
-      writeLogs(workspace, result);
       throw new AssertionError("Timed-out: " + configuration.getTimeout());
     }
-
     if (result.getExitCode() != expectedExitCode) {
-      writeLogs(workspace, result);
       throw new AssertionError(
           "Exit code: " + result.getExitCode() + "(expected=" + expectedExitCode + ")");
     }

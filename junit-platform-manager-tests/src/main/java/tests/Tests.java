@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.Duration;
 import java.util.List;
 
 @SuppressWarnings("WeakerAccess")
@@ -48,6 +49,7 @@ class Tests {
     var configuration = Configuration.builder();
     configuration.setWorkingDirectory(workspace);
     configuration.setArguments(List.of(args));
+    configuration.setTimeout(Duration.ofMinutes(1));
 
     var result = tool.run(configuration.build());
 

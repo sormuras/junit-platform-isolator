@@ -19,7 +19,11 @@ class Tests {
   private final int expectedExitCode;
 
   Tests() {
-    this.expectedExitCode = 0;
+    this(0);
+  }
+
+  Tests(int expectedExitCode) {
+    this.expectedExitCode = expectedExitCode;
   }
 
   Result gradle(String name) {
@@ -61,7 +65,7 @@ class Tests {
     if (result.getExitCode() != expectedExitCode) {
       writeLogs(workspace, result);
       throw new AssertionError(
-          "Expected exit code of " + expectedExitCode + ", but got: %d" + result.getExitCode());
+          "Exit code: " + result.getExitCode() + "(expected=" + expectedExitCode + ")");
     }
 
     return result;

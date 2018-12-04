@@ -5,8 +5,8 @@ install: true
 script: mvn install && (cd junit-platform-manager-tests; mvn verify)
 
 before_cache:
-  - rm -f $HOME/.m2/repository/de/sormuras/junit-platform-manager-parent
-  - rm -f $HOME/.m2/repository/de/sormuras/junit-platform-manager
+  - rm -rf $HOME/.m2/repository/de/sormuras/junit-platform-manager-parent
+  - rm -rf $HOME/.m2/repository/de/sormuras/junit-platform-manager
 
 cache:
   directories:

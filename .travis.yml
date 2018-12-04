@@ -2,7 +2,11 @@ dist: xenial
 language: java
 
 install: true
-script: mvn install
+script: mvn install && (cd junit-platform-manager-tests; mvn verify)
+
+before_cache:
+  - rm -f $HOME/.m2/repository/de/sormuras/junit-platform-manager-parent
+  - rm -f $HOME/.m2/repository/de/sormuras/junit-platform-manager
 
 cache:
   directories:

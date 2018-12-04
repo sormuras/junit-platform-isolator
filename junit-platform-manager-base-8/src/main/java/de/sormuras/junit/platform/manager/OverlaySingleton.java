@@ -6,7 +6,7 @@ import java.net.URLClassLoader;
 enum OverlaySingleton implements Overlay {
   INSTANCE {
     @Override
-    public URLClassLoader newClassLoader(String name, ClassLoader parent, URL... urls) {
+    public URLClassLoader newClassLoader(String __, ClassLoader parent, URL... urls) {
       return new URLClassLoader(urls, parent);
     }
   }

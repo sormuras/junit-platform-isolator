@@ -17,6 +17,12 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-launcher</artifactId>
+            <version>${junit.platform.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>de.sormuras</groupId>
             <artifactId>junit-platform-manager-base-8</artifactId>
             <version>${project.version}</version>

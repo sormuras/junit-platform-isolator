@@ -20,6 +20,7 @@
             <groupId>org.junit.platform</groupId>
             <artifactId>junit-platform-launcher</artifactId>
             <version>${junit.platform.version}</version>
+            <scope>provided</scope> <!-- Don't leak into paths! -->
         </dependency>
 
         <dependency>

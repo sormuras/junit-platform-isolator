@@ -9,6 +9,11 @@ interface Overlay {
   /** Create new URLClassLoader instance. */
   URLClassLoader newClassLoader(String name, ClassLoader parent, URL... urls);
 
+  /**
+   * Get the {@link ClassLoader} providing access to just the classes of the runtime Java platform.
+   */
+  ClassLoader platformClassLoader();
+
   /** Log-related methods. */
   interface Log {
 

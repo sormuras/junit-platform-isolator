@@ -30,5 +30,10 @@ enum OverlaySingleton implements Overlay, Overlay.Log {
     public URLClassLoader newClassLoader(String name, ClassLoader parent, URL... urls) {
       return new URLClassLoader(name, urls, parent);
     }
+
+    @Override
+    public ClassLoader platformClassLoader() {
+      return ClassLoader.getPlatformClassLoader();
+    }
   }
 }

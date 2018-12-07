@@ -1,41 +1,97 @@
 package de.sormuras.junit.platform.manager;
 
+import static org.junit.platform.engine.discovery.DiscoverySelectors.selectDirectory;
+
+import java.nio.file.Paths;
+import java.util.Collections;
+import java.util.concurrent.Callable;
 import org.junit.platform.launcher.Launcher;
 import org.junit.platform.launcher.LauncherDiscoveryRequest;
-import org.junit.platform.launcher.TestExecutionListener;
 import org.junit.platform.launcher.TestPlan;
+import org.junit.platform.launcher.core.LauncherDiscoveryRequestBuilder;
 import org.junit.platform.launcher.core.LauncherFactory;
+import org.junit.platform.launcher.listeners.SummaryGeneratingListener;
 
-public class Manager implements Launcher {
+public class Manager implements Callable<Integer> {
 
   private final Overlay.Log log = OverlaySingleton.INSTANCE;
 
-  private final Launcher launcher;
+  private final Configuration configuration;
+  private final LauncherDiscoveryRequest request;
 
   public Manager() {
-    this(LauncherFactory.create());
+    this(
+        new Configuration.Default()
+            .setSelectedDirectories(
+                Collections.singletonList(Paths.get("target", "test-classes"))));
   }
 
-  public Manager(Launcher launcher) {
-    this.launcher = launcher;
-    log.info("Created Manager with launcher: " + launcher);
+  public Manager(Configuration configuration) {
+    this.configuration = configuration;
+    this.request = buildRequest(configuration);
+    log.info("Created Manager with configuration: " + configuration);
+  }
+
+  private LauncherDiscoveryRequest buildRequest(Configuration configuration) {
+    LauncherDiscoveryRequestBuilder builder = LauncherDiscoveryRequestBuilder.request();
+    // selectors
+    configuration.getSelectedDirectories().forEach(p -> selectDirectory(p.toFile()));
+    // TODO filters
+    //   if (!mojo.getTags().isEmpty()) {
+    //     builder.filters(TagFilter.includeTags(mojo.getTags()));
+    //   }
+    // parameters
+    builder.configurationParameters(configuration.getParameters());
+    return builder.build();
   }
 
   @Override
-  public void registerTestExecutionListeners(TestExecutionListener... listeners) {
-    log.info("registerTestExecutionListeners({0})", (Object) listeners);
-    launcher.registerTestExecutionListeners(listeners);
+  public Integer call() {
+    Launcher launcher = createLauncher();
+    discover(launcher);
+    if (configuration.isDryRun()) {
+      log.info("Dry-run.");
+      return 0;
+    }
+    return execute(launcher);
   }
 
-  @Override
-  public TestPlan discover(LauncherDiscoveryRequest request) {
-    log.info("discover({0})", launcher);
-    return launcher.discover(request);
+  protected Launcher createLauncher() {
+    return LauncherFactory.create();
   }
 
-  @Override
-  public void execute(LauncherDiscoveryRequest request, TestExecutionListener... listeners) {
-    log.info("execute({0}, {1})" + request, (Object) listeners);
-    launcher.execute(request, listeners);
+  protected void discover(Launcher launcher) {
+    log.debug("Discovering tests...");
+
+    TestPlan testPlan = launcher.discover(request);
+    testPlan.getRoots().forEach(engine -> log.info(" o " + engine.getDisplayName()));
+    log.info("Test plan tree: (...)");
+
+    if (!testPlan.containsTests() && !configuration.isDryRun()) {
+      String message = "Zero tests discovered!";
+      log.warn(message);
+      throw new AssertionError(message);
+    }
+  }
+
+  protected int execute(Launcher launcher) {
+    log.debug("Executing tests...");
+
+    SummaryGeneratingListener summary = new SummaryGeneratingListener();
+    launcher.registerTestExecutionListeners(summary);
+
+    // TODO https://github.com/junit-team/junit5/issues/1375
+    //    String reports = configuration.getReports();
+    //    if (!reports.trim().isEmpty()) {
+    //      Path path = Paths.get(reports);
+    //      if (!path.isAbsolute()) {
+    //        path = Paths.get(build.getDirectory()).resolve(path);
+    //      }
+    //      launcher.register...(new XmlReportsWritingListener(path, log::error));
+    //    }
+
+    launcher.execute(request);
+
+    return summary.getSummary().getTotalFailureCount() == 0 ? 0 : 1;
   }
 }

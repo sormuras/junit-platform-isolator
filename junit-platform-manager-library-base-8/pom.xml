@@ -9,13 +9,28 @@
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>junit-platform-manager</artifactId>
+    <artifactId>junit-platform-manager-library-base-8</artifactId>
 
     <properties>
+        <maven.install.skip>true</maven.install.skip>
         <maven.compiler.release>8</maven.compiler.release>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
     </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>de.sormuras</groupId>
+            <artifactId>junit-platform-manager</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-launcher</artifactId>
+            <version>${junit.platform.version}</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
 
     <build>
         <plugins>
@@ -28,7 +43,7 @@
                 <configuration>
                     <archive>
                         <manifestEntries>
-                            <Automatic-Module-Name>de.sormuras.junit.platform.manager</Automatic-Module-Name>
+                            <Automatic-Module-Name>de.sormuras.junit.platform.manager.library</Automatic-Module-Name>
                         </manifestEntries>
                     </archive>
                 </configuration>

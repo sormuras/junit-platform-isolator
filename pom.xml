@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<!--<?xml version="1.0" encoding="UTF-8"?>-->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -18,9 +18,12 @@
     </properties>
 
     <modules>
-        <module>junit-platform-manager-base-8</module>
-        <module>junit-platform-manager-java-11</module>
+        <!-- API -->
         <module>junit-platform-manager</module>
+        <!-- Implementation -->
+        <module>junit-platform-manager-library-base-8</module>
+        <module>junit-platform-manager-library-java-11</module>
+        <module>junit-platform-manager-library</module>
     </modules>
 
     <dependencies>

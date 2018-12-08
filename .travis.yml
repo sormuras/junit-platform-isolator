@@ -17,6 +17,7 @@ after_failure:
 
 before_cache:
   - rm -rf $HOME/.m2/repository/de/sormuras/junit-platform-manager-parent
+  - rm -rf $HOME/.m2/repository/de/sormuras/junit-platform-manager-library
   - rm -rf $HOME/.m2/repository/de/sormuras/junit-platform-manager
 
 cache:

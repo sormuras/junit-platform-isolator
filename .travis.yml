@@ -5,6 +5,14 @@ before_install: unset -v _JAVA_OPTIONS
 install: true
 script: mvn install && (cd junit-platform-manager-tests; mvn verify)
 
+after_failure:
+  - echo "basic/grade"
+  - tail -200 target/it/basic/gradle/run-out.log
+  - tail -200 target/it/basic/gradle/run-err.log
+  - echo "basic/maven"
+  - tail -200 target/it/basic/maven/run-out.log
+  - tail -200 target/it/basic/maven/run-err.log
+
 before_cache:
   - rm -rf $HOME/.m2/repository/de/sormuras/junit-platform-manager-parent
   - rm -rf $HOME/.m2/repository/de/sormuras/junit-platform-manager

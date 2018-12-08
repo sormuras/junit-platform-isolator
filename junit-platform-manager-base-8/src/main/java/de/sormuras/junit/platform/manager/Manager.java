@@ -1,97 +1,113 @@
 package de.sormuras.junit.platform.manager;
 
-import static org.junit.platform.engine.discovery.DiscoverySelectors.selectDirectory;
+import static org.junit.platform.engine.discovery.DiscoverySelectors.*;
 
-import java.nio.file.Paths;
+import java.lang.reflect.UndeclaredThrowableException;
+import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.Callable;
+import java.util.function.BiConsumer;
+import org.junit.platform.engine.DiscoverySelector;
 import org.junit.platform.launcher.Launcher;
 import org.junit.platform.launcher.LauncherDiscoveryRequest;
 import org.junit.platform.launcher.TestPlan;
 import org.junit.platform.launcher.core.LauncherDiscoveryRequestBuilder;
 import org.junit.platform.launcher.core.LauncherFactory;
-import org.junit.platform.launcher.listeners.SummaryGeneratingListener;
 
-public class Manager implements Callable<Integer> {
+public class Manager implements BiConsumer<String, Object>, Callable<Integer> {
 
   private final Overlay.Log log = OverlaySingleton.INSTANCE;
 
-  private final Configuration configuration;
-  private final LauncherDiscoveryRequest request;
+  private boolean dryRun = false;
+  private final List<DiscoverySelector> selectors = new ArrayList<>();
+  private final Map<String, String> parameters = new HashMap<>();
 
   public Manager() {
-    this(
-        new Configuration.Default()
-            .setSelectedDirectories(
-                Collections.singletonList(Paths.get("target", "test-classes"))));
+    log.info("Manager created (loader={0})", getClass().getClassLoader());
   }
 
-  public Manager(Configuration configuration) {
-    this.configuration = configuration;
-    this.request = buildRequest(configuration);
-    log.info("Created Manager with configuration: " + configuration);
+  @Override
+  public void accept(String name, Object value) {
+    switch (name) {
+      case "dry-run(boolean)":
+        dryRun = (boolean) value;
+        return;
+      case "class-path-root(Path)":
+        Set<Path> root = Collections.singleton((Path) value);
+        selectors.addAll(selectClasspathRoots(root));
+        return;
+      case "class-path-roots(Set<Path>)":
+        @SuppressWarnings("unchecked")
+        Set<Path> roots = (Set<Path>) value;
+        selectors.addAll(selectClasspathRoots(roots));
+        return;
+      case "configuration-parameters":
+        @SuppressWarnings("unchecked")
+        Map<String, String> map = (Map<String, String>) value;
+        parameters.putAll(map);
+        return;
+    }
+    if (name.startsWith("configuration-parameter-")) {
+      String key = name.substring("configuration-parameter-".length());
+      parameters.put(key, String.valueOf(value));
+      return;
+    }
+    if (value instanceof DiscoverySelector) {
+      selectors.add((DiscoverySelector) value);
+      return;
+    }
+    // direct field access?
+    try {
+      getClass().getField(name).set(this, value);
+    } catch (ReflectiveOperationException e) {
+      log.warn("Setting field {0} to {1} failed!", name, value);
+      throw rethrow(e);
+    }
   }
 
-  private LauncherDiscoveryRequest buildRequest(Configuration configuration) {
+  @Override
+  public Integer call() {
+    Launcher launcher = LauncherFactory.create();
+    LauncherDiscoveryRequest request = createRequest();
+    LaunchPad launchPad = new LaunchPad(launcher, request);
+    TestPlan testPlan = launchPad.discover();
+    if (dryRun) {
+      log.info("Dry-run.");
+      return 0;
+    }
+    if (!testPlan.containsTests()) {
+      log.warn("No test found.", testPlan.getRoots());
+      return -1;
+    }
+    return launchPad.execute();
+  }
+
+  private LauncherDiscoveryRequest createRequest() {
     LauncherDiscoveryRequestBuilder builder = LauncherDiscoveryRequestBuilder.request();
     // selectors
-    configuration.getSelectedDirectories().forEach(p -> selectDirectory(p.toFile()));
+    builder.selectors(selectors);
+    // configuration.getSelectedDirectories().forEach(p -> selectClasspathRoots(p.toFile()));
     // TODO filters
     //   if (!mojo.getTags().isEmpty()) {
     //     builder.filters(TagFilter.includeTags(mojo.getTags()));
     //   }
     // parameters
-    builder.configurationParameters(configuration.getParameters());
+    builder.configurationParameters(parameters);
     return builder.build();
   }
 
-  @Override
-  public Integer call() {
-    Launcher launcher = createLauncher();
-    discover(launcher);
-    if (configuration.isDryRun()) {
-      log.info("Dry-run.");
-      return 0;
+  private static UndeclaredThrowableException rethrow(Throwable cause) {
+    if (cause instanceof RuntimeException) {
+      throw (RuntimeException) cause;
     }
-    return execute(launcher);
-  }
-
-  protected Launcher createLauncher() {
-    return LauncherFactory.create();
-  }
-
-  protected void discover(Launcher launcher) {
-    log.debug("Discovering tests...");
-
-    TestPlan testPlan = launcher.discover(request);
-    testPlan.getRoots().forEach(engine -> log.info(" o " + engine.getDisplayName()));
-    log.info("Test plan tree: (...)");
-
-    if (!testPlan.containsTests() && !configuration.isDryRun()) {
-      String message = "Zero tests discovered!";
-      log.warn(message);
-      throw new AssertionError(message);
+    if (cause instanceof Error) {
+      throw (Error) cause;
     }
-  }
-
-  protected int execute(Launcher launcher) {
-    log.debug("Executing tests...");
-
-    SummaryGeneratingListener summary = new SummaryGeneratingListener();
-    launcher.registerTestExecutionListeners(summary);
-
-    // TODO https://github.com/junit-team/junit5/issues/1375
-    //    String reports = configuration.getReports();
-    //    if (!reports.trim().isEmpty()) {
-    //      Path path = Paths.get(reports);
-    //      if (!path.isAbsolute()) {
-    //        path = Paths.get(build.getDirectory()).resolve(path);
-    //      }
-    //      launcher.register...(new XmlReportsWritingListener(path, log::error));
-    //    }
-
-    launcher.execute(request);
-
-    return summary.getSummary().getTotalFailureCount() == 0 ? 0 : 1;
+    return new UndeclaredThrowableException(cause);
   }
 }

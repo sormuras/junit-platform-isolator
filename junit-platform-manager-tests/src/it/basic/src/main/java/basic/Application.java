@@ -1,12 +1,12 @@
 package basic;
 
-import de.sormuras.junit.platform.manager.Configuration;
+import de.sormuras.junit.platform.manager.Manager;
 
 class Application {
 
-  private final Configuration configuration = new Configuration.Default();
+  private final Manager manager = new Manager();
 
   boolean isDryRun() {
-    return configuration.isDryRun();
+    return manager.isDryRun();
   }
 }

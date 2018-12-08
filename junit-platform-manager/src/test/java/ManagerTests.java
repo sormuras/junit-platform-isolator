@@ -7,6 +7,7 @@ class ManagerTests {
   void classLoaderSeparation() {
     Manager manager = new Manager();
     manager.accept("dry-run(boolean)", true);
+    Assertions.assertTrue(manager.isDryRun());
     Assertions.assertEquals(Integer.valueOf(0), manager.call());
   }
 }

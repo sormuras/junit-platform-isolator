@@ -76,7 +76,7 @@ public class Manager implements BiConsumer<String, Object>, Callable<Integer> {
     LauncherDiscoveryRequest request = createRequest();
     LaunchPad launchPad = new LaunchPad(launcher, request);
     TestPlan testPlan = launchPad.discover();
-    if (dryRun) {
+    if (isDryRun()) {
       log.info("Dry-run.");
       return 0;
     }
@@ -99,6 +99,10 @@ public class Manager implements BiConsumer<String, Object>, Callable<Integer> {
     // parameters
     builder.configurationParameters(parameters);
     return builder.build();
+  }
+
+  public boolean isDryRun() {
+    return dryRun;
   }
 
   private static UndeclaredThrowableException rethrow(Throwable cause) {

@@ -9,7 +9,6 @@ import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.io.UncheckedIOException;
-import java.nio.file.Path;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
@@ -31,7 +30,7 @@ public class Configuration implements Serializable {
 
   private Map<String, String> parameters = Collections.emptyMap();
 
-  private Set<Path> selectedClassPathRoots = Collections.emptySet();
+  private Set<String> selectedClassPathRoots = Collections.emptySet();
 
   public String getWorkerCoordinates() {
     return workerCoordinates;
@@ -63,12 +62,12 @@ public class Configuration implements Serializable {
   }
 
   /** Select `class-path` roots. */
-  public Set<Path> getSelectedClassPathRoots() {
+  public Set<String> getSelectedClassPathRoots() {
     return selectedClassPathRoots;
   }
 
   /** Select `class-path` roots. */
-  public Configuration setSelectedClassPathRoots(Set<Path> paths) {
+  public Configuration setSelectedClassPathRoots(Set<String> paths) {
     this.selectedClassPathRoots = paths;
     return this;
   }
@@ -129,7 +128,8 @@ public class Configuration implements Serializable {
         ObjectInput in = new ObjectInputStream(bis)) {
       return (Configuration) in.readObject();
     } catch (IOException e) {
-      throw new UncheckedIOException("Writing configuration to byte[] failed", e);
+      throw new UncheckedIOException(
+          "Reading configuration from byte[" + bytes.length + "] failed", e);
     } catch (ClassNotFoundException e) {
       throw new AssertionError("Configuration class not found?!", e);
     }

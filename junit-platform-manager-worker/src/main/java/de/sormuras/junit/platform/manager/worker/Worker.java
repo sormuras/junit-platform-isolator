@@ -5,6 +5,10 @@ import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClass
 import de.sormuras.junit.platform.manager.Configuration;
 import de.sormuras.junit.platform.manager.Log;
 import de.sormuras.junit.platform.manager.OverlaySingleton;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import java.util.concurrent.Callable;
 import org.junit.platform.launcher.Launcher;
 import org.junit.platform.launcher.LauncherDiscoveryRequest;
@@ -47,7 +51,11 @@ public class Worker implements Callable<Integer> {
   private LauncherDiscoveryRequest createRequest() {
     LauncherDiscoveryRequestBuilder builder = LauncherDiscoveryRequestBuilder.request();
     // selectors
-    builder.selectors(selectClasspathRoots(configuration.getSelectedClassPathRoots()));
+    Set<Path> classPathRoots = new LinkedHashSet<>();
+    for (String root : configuration.getSelectedClassPathRoots()) {
+      classPathRoots.add(Paths.get(root));
+    }
+    builder.selectors(selectClasspathRoots(classPathRoots));
     // TODO filters
     //   if (!mojo.getTags().isEmpty()) {
     //     builder.filters(TagFilter.includeTags(mojo.getTags()));

@@ -1,6 +1,6 @@
 package de.sormuras.junit.platform.manager.worker;
 
-import de.sormuras.junit.platform.manager.Overlay;
+import de.sormuras.junit.platform.manager.Log;
 import de.sormuras.junit.platform.manager.OverlaySingleton;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -12,7 +12,7 @@ import org.junit.platform.launcher.listeners.TestExecutionSummary;
 
 class LaunchPad {
 
-  private final Overlay.Log log = OverlaySingleton.INSTANCE;
+  private final Log log = OverlaySingleton.INSTANCE;
 
   private final Launcher launcher;
   private final LauncherDiscoveryRequest request;

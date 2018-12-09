@@ -6,7 +6,7 @@ import java.text.MessageFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public enum OverlaySingleton implements Overlay, Overlay.Log {
+public enum OverlaySingleton implements Overlay, Log {
   INSTANCE {
     private final Logger logger = Logger.getLogger(Overlay.class.getPackage().getName());
 

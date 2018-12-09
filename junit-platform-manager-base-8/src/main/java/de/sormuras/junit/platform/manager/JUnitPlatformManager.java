@@ -5,14 +5,12 @@ import java.util.concurrent.Callable;
 
 public class JUnitPlatformManager {
 
-  private static final Overlay.Log log = OverlaySingleton.INSTANCE;
+  private static final Log log = OverlaySingleton.INSTANCE;
 
   private final Isolator isolator;
-  private final Resolver resolver;
 
-  public JUnitPlatformManager(Isolator isolator, Resolver resolver) {
+  public JUnitPlatformManager(Isolator isolator) {
     this.isolator = isolator;
-    this.resolver = resolver;
   }
 
   public int evaluate(Configuration configuration) throws Exception {

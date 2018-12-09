@@ -7,7 +7,7 @@ import static java.lang.System.Logger.Level.WARNING;
 import java.net.URL;
 import java.net.URLClassLoader;
 
-public enum OverlaySingleton implements Overlay, Overlay.Log {
+public enum OverlaySingleton implements Overlay, Log {
   INSTANCE {
     private final System.Logger logger = System.getLogger(Overlay.class.getPackage().getName());
 

@@ -3,7 +3,7 @@ package de.sormuras.junit.platform.manager.worker;
 import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClasspathRoots;
 
 import de.sormuras.junit.platform.manager.Configuration;
-import de.sormuras.junit.platform.manager.Overlay;
+import de.sormuras.junit.platform.manager.Log;
 import de.sormuras.junit.platform.manager.OverlaySingleton;
 import java.util.concurrent.Callable;
 import org.junit.platform.launcher.Launcher;
@@ -14,7 +14,7 @@ import org.junit.platform.launcher.core.LauncherFactory;
 
 public class Worker implements Callable<Integer> {
 
-  private final Overlay.Log log = OverlaySingleton.INSTANCE;
+  private final Log log = OverlaySingleton.INSTANCE;
 
   private final Configuration configuration;
 

@@ -31,6 +31,8 @@ import java.util.function.Function;
 
 public class Isolator {
 
+  private static final Overlay overlay = OverlaySingleton.INSTANCE;
+
   private final Map<String, Set<Path>> paths;
   private final Resolver resolver;
   private final Function<Version, String> version;
@@ -42,7 +44,7 @@ public class Isolator {
     this.version = version;
   }
 
-  ClassLoader createClassLoader(String library) throws Exception {
+  ClassLoader createClassLoader(String workerCoordinates) throws Exception {
     //
     // Main and Test source sets
     //
@@ -63,22 +65,12 @@ public class Isolator {
     platformPaths.removeAll(testPaths);
 
     //
-    // Manager library
+    // Worker + Manager
     //
-    Set<Path> managerPaths = new LinkedHashSet<>();
-    //    resolver
-    //        .resolve(library, "")
-    //        .forEach(artifact -> managerPaths.add(artifact.getFile().toPath()));
-    managerPaths.add(resolver.resolve(library));
+    Set<Path> managerPaths = resolver.resolveAll(workerCoordinates);
 
-    //    mojo.debug("Main (scope=compile) Paths", mainPaths);
-    //    mojo.debug("Test (scope=test) Paths", testPaths);
-    //    mojo.debug("JUnit Platform Paths", platformPaths);
-    //    mojo.debug("Sors Manager Paths", managerPaths);
-
-    // ClassLoader parent = getClass().getClassLoader();
-    ClassLoader parent = null; // ClassLoader.getPlatformClassLoader();
-    ClassLoader mainLoader = new URLClassLoader(urls(mainPaths), parent);
+    ClassLoader rootLoader = overlay.platformClassLoader();
+    ClassLoader mainLoader = new URLClassLoader(urls(mainPaths), rootLoader);
     ClassLoader testLoader = new URLClassLoader(urls(testPaths), mainLoader);
     ClassLoader platformLoader = new URLClassLoader(urls(platformPaths), testLoader);
     ClassLoader managerLoader = new URLClassLoader(urls(managerPaths), platformLoader);

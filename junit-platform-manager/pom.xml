@@ -12,10 +12,30 @@
     <artifactId>junit-platform-manager</artifactId>
 
     <properties>
-        <maven.compiler.release>8</maven.compiler.release>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
+        <jar.file.name>${project.artifactId}-${project.version}.jar</jar.file.name>
     </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-launcher</artifactId>
+            <version>${junit.platform.version}</version>
+            <scope>provided</scope> <!-- Don't leak into 3rd-party projects! -->
+        </dependency>
+
+        <dependency>
+            <groupId>de.sormuras</groupId>
+            <artifactId>junit-platform-manager-base-8</artifactId>
+            <version>${project.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>de.sormuras</groupId>
+            <artifactId>junit-platform-manager-java-11</artifactId>
+            <version>${project.version}</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
 
     <build>
         <plugins>
@@ -24,14 +44,52 @@
                 <artifactId>fmt-maven-plugin</artifactId>
             </plugin>
             <plugin>
-                <artifactId>maven-jar-plugin</artifactId>
-                <configuration>
-                    <archive>
-                        <manifestEntries>
-                            <Automatic-Module-Name>de.sormuras.junit.platform.manager</Automatic-Module-Name>
-                        </manifestEntries>
-                    </archive>
-                </configuration>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.6.0</version>
+                <executions>
+                    <execution>
+                        <id>jar --update --release 11</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>jar</executable>
+                            <arguments>
+                                <argument>--verbose</argument>
+                                <argument>--update</argument>
+                                <argument>--file</argument>
+                                <argument>target/${jar.file.name}</argument>
+                                <argument>-C</argument>
+                                <argument>../${project.artifactId}-base-8/target/classes</argument>
+                                <argument>.</argument>
+                                <argument>--release</argument>
+                                <argument>11</argument>
+                                <argument>-C</argument>
+                                <argument>../${project.artifactId}-java-11/target/classes</argument>
+                                <argument>.</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>jar --describe-module --release 11</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>jar</executable>
+                            <arguments>
+                                <argument>--describe-module</argument>
+                                <argument>--file</argument>
+                                <argument>target/${jar.file.name}</argument>
+                                <argument>--release</argument>
+                                <argument>11</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

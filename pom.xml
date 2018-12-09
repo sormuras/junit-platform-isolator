@@ -18,12 +18,12 @@
     </properties>
 
     <modules>
-        <!-- API -->
+        <!-- Multi-release Java archive modules -->
+        <module>junit-platform-manager-base-8</module>
+        <module>junit-platform-manager-java-11</module>
         <module>junit-platform-manager</module>
-        <!-- Implementation -->
-        <module>junit-platform-manager-library-base-8</module>
-        <module>junit-platform-manager-library-java-11</module>
-        <module>junit-platform-manager-library</module>
+        <!-- Decoupled worker module, loadable in an isolated environment -->
+        <module>junit-platform-manager-worker</module>
     </modules>
 
     <dependencies>

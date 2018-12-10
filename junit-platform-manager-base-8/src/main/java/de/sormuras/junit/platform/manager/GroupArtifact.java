@@ -3,7 +3,7 @@ package de.sormuras.junit.platform.manager;
 import java.util.function.Function;
 
 /** Maven group and artifact coordinates. */
-enum GroupArtifact {
+public enum GroupArtifact {
   JUNIT_JUPITER_API("org.junit.jupiter", "junit-jupiter-api", "JUNIT_JUPITER"),
 
   JUNIT_JUPITER_ENGINE("org.junit.jupiter", "junit-jupiter-engine", "JUNIT_JUPITER"),
@@ -16,13 +16,15 @@ enum GroupArtifact {
 
   JUNIT_VINTAGE_ENGINE("org.junit.vintage", "junit-vintage-engine", "JUNIT_VINTAGE");
 
-  private final String artifact;
   private final String group;
+  private final String artifact;
+  private final String string;
   private final String versionName;
 
   GroupArtifact(String group, String artifact, String versionBaseName) {
     this.group = group;
     this.artifact = artifact;
+    this.string = group + ':' + artifact;
     this.versionName = versionBaseName + "_VERSION";
   }
 
@@ -39,10 +41,10 @@ enum GroupArtifact {
   }
 
   public String toString() {
-    return getGroup() + ':' + getArtifact();
+    return string;
   }
 
   public String toString(Function<Version, String> version) {
-    return toString() + ':' + version.apply(getVersion());
+    return string + ':' + version.apply(getVersion());
   }
 }

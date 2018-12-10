@@ -74,7 +74,9 @@ public class Isolator {
     ClassLoader testLoader = new URLClassLoader(urls(testPaths), mainLoader);
     ClassLoader platformLoader = new URLClassLoader(urls(platformPaths), testLoader);
     ClassLoader managerLoader = new URLClassLoader(urls(managerPaths), platformLoader);
-    assert managerLoader.getParent() == platformLoader;
+
+    testLoader.setDefaultAssertionStatus(true);
+
     return managerLoader;
   }
 

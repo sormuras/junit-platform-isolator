@@ -3,10 +3,10 @@ language: java
 
 before_install: unset -v _JAVA_OPTIONS
 install: true
-script: mvn install && (cd junit-platform-manager-tests; mvn verify)
+script: mvn install && (cd junit-platform-isolator-tests; mvn verify)
 
 after_failure:
-  - cd junit-platform-manager-tests
+  - cd junit-platform-isolator-tests
   - echo "basic/grade"
   - tail -200 target/it/basic/gradle/run-out.log
   - tail -200 target/it/basic/gradle/run-err.log
@@ -16,9 +16,9 @@ after_failure:
   - cd -
 
 before_cache:
-  - rm -rf $HOME/.m2/repository/de/sormuras/junit-platform-manager
-  - rm -rf $HOME/.m2/repository/de/sormuras/junit-platform-manager-parent
-  - rm -rf $HOME/.m2/repository/de/sormuras/junit-platform-manager-worker
+  - rm -rf $HOME/.m2/repository/de/sormuras/junit-platform-isolator
+  - rm -rf $HOME/.m2/repository/de/sormuras/junit-platform-isolator-root
+  - rm -rf $HOME/.m2/repository/de/sormuras/junit-platform-isolator-worker
 
 cache:
   directories:

@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>de.sormuras</groupId>
-    <artifactId>junit-platform-manager-parent</artifactId>
+    <artifactId>junit-platform-isolator-root</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
@@ -19,11 +19,11 @@
 
     <modules>
         <!-- Multi-release Java archive modules -->
-        <module>junit-platform-manager-base-8</module>
-        <module>junit-platform-manager-java-11</module>
-        <module>junit-platform-manager</module>
+        <module>junit-platform-isolator-base-8</module>
+        <module>junit-platform-isolator-java-11</module>
+        <module>junit-platform-isolator</module>
         <!-- Decoupled worker module, loadable in an isolated environment -->
-        <module>junit-platform-manager-worker</module>
+        <module>junit-platform-isolator-worker</module>
     </modules>
 
     <dependencies>

@@ -83,7 +83,7 @@ public class Worker implements Callable<Integer> {
     boolean ok = failures == 0;
 
     if (ok) {
-      long duration = summary.getTimeStarted() - summary.getTimeFinished();
+      long duration = summary.getTimeFinished() - summary.getTimeStarted();
       log.accept(
           "info",
           "Successfully executed "

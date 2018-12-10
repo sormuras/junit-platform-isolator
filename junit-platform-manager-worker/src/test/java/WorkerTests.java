@@ -11,8 +11,8 @@ class WorkerTests {
   void constructors() {
     Configuration configuration = new Configuration();
 
-    Worker worker1 = new Worker(configuration);
-    Worker worker2 = new Worker(configuration.toBytes());
+    Worker worker1 = new Worker(configuration, (_1, _2) -> {});
+    Worker worker2 = new Worker(configuration.toBytes(), (_1, _2) -> {});
 
     assertSame(configuration, worker1.getConfiguration());
     assertEquals(configuration, worker2.getConfiguration());

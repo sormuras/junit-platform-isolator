@@ -57,7 +57,7 @@ class LaunchPad {
     if (ok) {
       long duration = summary.getTimeStarted() - summary.getTimeFinished();
       log.info(
-          "Successfully executed %d test(s) in %d ms", summary.getTestsSucceededCount(), duration);
+          "Successfully executed {0} test(s) in {1} ms", summary.getTestsSucceededCount(), duration);
       return 0;
     }
 

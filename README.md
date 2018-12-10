@@ -1,2 +1,3 @@
-# junit-platform-manager
-JUnit Platform Manager
+# junit-platform-isolator
+
+![isolator](junit-platform-isolator.png)

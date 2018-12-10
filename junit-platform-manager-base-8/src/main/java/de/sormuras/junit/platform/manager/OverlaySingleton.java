@@ -2,29 +2,9 @@ package de.sormuras.junit.platform.manager;
 
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.text.MessageFormat;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-public enum OverlaySingleton implements Overlay, Log {
+public enum OverlaySingleton implements Overlay {
   INSTANCE {
-    private final Logger logger = Logger.getLogger(Overlay.class.getPackage().getName());
-
-    @Override
-    public void debug(String format, Object... args) {
-      logger.log(Level.FINE, () -> MessageFormat.format(format, args));
-    }
-
-    @Override
-    public void info(String format, Object... args) {
-      logger.log(Level.INFO, () -> MessageFormat.format(format, args));
-    }
-
-    @Override
-    public void warn(String format, Object... args) {
-      logger.log(Level.WARNING, () -> MessageFormat.format(format, args));
-    }
-
     @Override
     public URLClassLoader newClassLoader(String __, ClassLoader parent, URL... urls) {
       return new URLClassLoader(urls, parent);
@@ -36,7 +16,7 @@ public enum OverlaySingleton implements Overlay, Log {
       try {
         platformClassLoader.close();
       } catch (Exception e) {
-        warn("Closing an empty URLClassLoader failed?!", e);
+        throw new AssertionError("Closing an empty URLClassLoader failed?!", e);
       }
       return platformClassLoader;
     }

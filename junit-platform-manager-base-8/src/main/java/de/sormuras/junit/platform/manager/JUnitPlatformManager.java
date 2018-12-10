@@ -10,7 +10,6 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
 public class JUnitPlatformManager {
 
@@ -51,12 +50,18 @@ public class JUnitPlatformManager {
 
   private void log(String level, String message) {
     switch (level) {
-      case "debug": driver.debug(message); return;
-      case "info": driver.info(message); return;
-      case "warn": driver.warn(message); return;
-      default: driver.warn("[{0}] {1}", level, message);
+      case "debug":
+        driver.debug(message);
+        return;
+      case "info":
+        driver.info(message);
+        return;
+      case "warn":
+        driver.warn(message);
+        return;
+      default:
+        driver.warn("[{0}] {1}", level, message);
     }
-
   }
 
   private ClassLoader isolate(String workerCoordinates) throws Exception {

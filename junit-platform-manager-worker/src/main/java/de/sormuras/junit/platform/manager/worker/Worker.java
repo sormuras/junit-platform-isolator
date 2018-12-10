@@ -3,7 +3,6 @@ package de.sormuras.junit.platform.manager.worker;
 import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClasspathRoots;
 
 import de.sormuras.junit.platform.manager.Configuration;
-
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.nio.file.Path;
@@ -12,7 +11,6 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.function.BiConsumer;
-
 import org.junit.platform.launcher.Launcher;
 import org.junit.platform.launcher.LauncherDiscoveryRequest;
 import org.junit.platform.launcher.TestPlan;

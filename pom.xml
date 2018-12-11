@@ -8,6 +8,13 @@
     <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
+    <name>JUnit Platform Isolator</name>
+    <description>Launch JUnit Platform In Isolation</description>
+    <url>https://github.com/sormuras/junit-platform-isolator</url>
+    <scm>
+        <url>https://github.com/sormuras/junit-platform-isolator.git</url>
+    </scm>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.release>11</maven.compiler.release>
@@ -52,8 +59,16 @@
                     <version>3.1.0</version>
                 </plugin>
                 <plugin>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>3.0.1</version>
+                </plugin>
+                <plugin>
                     <artifactId>maven-resources-plugin</artifactId>
                     <version>3.1.0</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>3.0.1</version>
                 </plugin>
                 <!-- Google Java Format -->
                 <plugin>
@@ -80,7 +95,64 @@
                 <version>0.11.1</version>
                 <extensions>true</extensions>
             </plugin>
+            <plugin>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>javadoc</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <force>true</force>
+                    <failOnError>false</failOnError>
+                    <detectOfflineLinks>false</detectOfflineLinks>
+                    <quiet>true</quiet>
+                    <doclint>none</doclint>
+                    <additionalOptions>
+                        <additionalOption>-html5</additionalOption>
+                    </additionalOptions>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-source-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
+
+    <developers>
+        <developer>
+            <name>Christian Stein</name>
+            <id>sormuras</id>
+        </developer>
+    </developers>
+
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <distributionManagement>
+        <repository>
+            <id>bintray-sormuras-maven</id>
+            <name>sormuras-maven</name>
+            <url>https://api.bintray.com/maven/sormuras/maven/junit-platform-isolator/;publish=1</url>
+        </repository>
+    </distributionManagement>
 
 </project>

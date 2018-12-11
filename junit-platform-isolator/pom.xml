@@ -48,6 +48,7 @@
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>1.6.0</version>
                 <executions>
+
                     <execution>
                         <id>jar --update --release 11</id>
                         <phase>package</phase>
@@ -72,6 +73,7 @@
                             </arguments>
                         </configuration>
                     </execution>
+
                     <execution>
                         <id>jar --describe-module --release 11</id>
                         <phase>verify</phase>
@@ -86,6 +88,50 @@
                                 <argument>target/${jar.file.name}</argument>
                                 <argument>--release</argument>
                                 <argument>11</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>jar --update sources.jar</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>jar</executable>
+                            <arguments>
+                                <argument>--verbose</argument>
+                                <argument>--update</argument>
+                                <argument>--file</argument>
+                                <argument>target/${project.artifactId}-${project.version}-sources.jar</argument>
+                                <argument>-C</argument>
+                                <argument>../${project.artifactId}-base-8/src/main/java</argument>
+                                <argument>.</argument>
+                                <argument>--release</argument>
+                                <argument>11</argument>
+                                <argument>-C</argument>
+                                <argument>../${project.artifactId}-java-11/src/main/java</argument>
+                                <argument>.</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>jar --create javadoc.jar</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>jar</executable>
+                            <arguments>
+                                <argument>--create</argument>
+                                <argument>--file</argument>
+                                <argument>target/${project.artifactId}-${project.version}-javadoc.jar</argument>
+                                <argument>-C</argument>
+                                <argument>../${project.artifactId}-base-8/target/apidocs</argument>
+                                <argument>.</argument>
                             </arguments>
                         </configuration>
                     </execution>

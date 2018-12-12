@@ -17,12 +17,11 @@ import java.util.Set;
 /** Isolator configuration. */
 public class Configuration implements Serializable {
 
-  private String workerCoordinates =
-      "com.github.sormuras.junit-platform-isolator"
-          + ':'
-          + "junit-platform-isolator-worker"
-          + ':'
-          + "master-SNAPSHOT";
+  public static final String WORKER_GROUP = "de.sormuras.junit-platform-isolator";
+  public static final String WORKER_ARTIFACT = "junit-platform-isolator-worker";
+  public static final String WORKER_VERSION = implementationVersion("1.0.0-SNAPSHOT");
+
+  private String workerCoordinates = WORKER_GROUP + ':' + WORKER_ARTIFACT + ':' + WORKER_VERSION;
   private String workerClassName = "de.sormuras.junit.platform.isolator.worker.Worker";
   private boolean dryRun = false;
   private boolean platformClassLoader = true;
@@ -149,5 +148,10 @@ public class Configuration implements Serializable {
     } catch (ClassNotFoundException e) {
       throw new AssertionError("Configuration class not found?!", e);
     }
+  }
+
+  static String implementationVersion(String defaultVersion) {
+    String version = Configuration.class.getPackage().getImplementationVersion();
+    return version != null ? version : defaultVersion;
   }
 }

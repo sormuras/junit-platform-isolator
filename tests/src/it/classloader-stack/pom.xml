@@ -23,7 +23,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>de.sormuras</groupId>
+            <groupId>de.sormuras.junit-platform-isolator</groupId>
             <artifactId>junit-platform-isolator</artifactId>
             <version>@project.version@</version>
         </dependency>

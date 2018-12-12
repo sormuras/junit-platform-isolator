@@ -8,7 +8,7 @@ repositories {
 }
 
 dependencies {
-    compile 'de.sormuras:junit-platform-isolator:@project.version@'
+    compile 'de.sormuras.junit-platform-isolator:junit-platform-isolator:@project.version@'
     testCompile('org.junit.jupiter:junit-jupiter-api:@junit.jupiter.version@')
     testRuntime('org.junit.jupiter:junit-jupiter-engine:@junit.jupiter.version@')
 }

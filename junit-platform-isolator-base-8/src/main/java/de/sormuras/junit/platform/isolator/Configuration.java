@@ -19,7 +19,7 @@ public class Configuration implements Serializable {
 
   public static final String WORKER_GROUP = "de.sormuras.junit-platform-isolator";
   public static final String WORKER_ARTIFACT = "junit-platform-isolator-worker";
-  public static final String WORKER_VERSION = implementationVersion("1.0.0-M2");
+  public static final String WORKER_VERSION = implementationVersion("1.0.0-SNAPSHOT");
 
   private String workerCoordinates = WORKER_GROUP + ':' + WORKER_ARTIFACT + ':' + WORKER_VERSION;
   private String workerClassName = "de.sormuras.junit.platform.isolator.worker.Worker";

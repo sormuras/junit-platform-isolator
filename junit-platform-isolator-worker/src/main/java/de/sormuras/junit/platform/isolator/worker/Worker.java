@@ -54,15 +54,17 @@ public class Worker implements Callable<Integer> {
   public Integer call() {
     Launcher launcher = LauncherFactory.create();
     LauncherDiscoveryRequest request = buildRequest();
-    TestPlan testPlan = launcher.discover(request);
+
     if (configuration.isDryRun()) {
       log.accept("info", "Dry-run.");
+      TestPlan testPlan = launcher.discover(request);
+      if (!testPlan.containsTests()) {
+        log.accept("warn", "No test found: " + testPlan.getRoots());
+        return -1;
+      }
       return 0;
     }
-    if (!testPlan.containsTests()) {
-      log.accept("warn", "No test found: " + testPlan.getRoots());
-      return -1;
-    }
+
     SummaryGeneratingListener summaryGeneratingListener = new SummaryGeneratingListener();
     launcher.registerTestExecutionListeners(summaryGeneratingListener);
 

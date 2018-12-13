@@ -1,16 +1,15 @@
 package de.sormuras.junit.platform.isolator.worker;
 
-import de.sormuras.junit.platform.isolator.Configuration;
-import org.junit.platform.launcher.LauncherDiscoveryRequest;
-import org.junit.platform.launcher.core.LauncherDiscoveryRequestBuilder;
+import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClasspathRoots;
+import static org.junit.platform.launcher.core.LauncherDiscoveryRequestBuilder.request;
 
+import de.sormuras.junit.platform.isolator.Configuration;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.LinkedHashSet;
 import java.util.Set;
-
-import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClasspathRoots;
-import static org.junit.platform.launcher.core.LauncherDiscoveryRequestBuilder.request;
+import org.junit.platform.launcher.LauncherDiscoveryRequest;
+import org.junit.platform.launcher.core.LauncherDiscoveryRequestBuilder;
 
 class LauncherDiscoveryRequestCreator {
 
@@ -30,5 +29,4 @@ class LauncherDiscoveryRequestCreator {
     requestBuilder.configurationParameters(configuration.getParameters());
     return requestBuilder.build();
   }
-
 }

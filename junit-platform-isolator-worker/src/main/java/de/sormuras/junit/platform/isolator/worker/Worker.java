@@ -3,10 +3,12 @@ package de.sormuras.junit.platform.isolator.worker;
 import de.sormuras.junit.platform.isolator.Configuration;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.text.MessageFormat;
 import java.util.concurrent.Callable;
 import java.util.function.BiConsumer;
 import org.junit.platform.launcher.Launcher;
 import org.junit.platform.launcher.LauncherDiscoveryRequest;
+import org.junit.platform.launcher.TestIdentifier;
 import org.junit.platform.launcher.TestPlan;
 import org.junit.platform.launcher.listeners.SummaryGeneratingListener;
 import org.junit.platform.launcher.listeners.TestExecutionSummary;
@@ -25,18 +27,38 @@ public class Worker implements Callable<Integer> {
     this.log = log;
   }
 
+  /** Log a message formatted in {@link java.text.MessageFormat} style at debug level. */
+  private void debug(String format, Object... args) {
+    log.accept("debug", MessageFormat.format(format, args));
+  }
+
+  /** Log a message formatted in {@link java.text.MessageFormat} style at info level. */
+  private void info(String format, Object... args) {
+    log.accept("info", MessageFormat.format(format, args));
+  }
+
+  /** Log a message formatted in {@link java.text.MessageFormat} style at warning level. */
+  private void warn(String format, Object... args) {
+    log.accept("warn", MessageFormat.format(format, args));
+  }
+
   @Override
   public Integer call() {
+    debug("Creating launcher and discovery request...");
     Launcher launcher = new LauncherCreator().create(configuration);
     LauncherDiscoveryRequest request = new LauncherDiscoveryRequestCreator().create(configuration);
 
     if (configuration.isDryRun()) {
-      log.accept("info", "Dry-run.");
+      debug("Discover-only in dry-run mode...");
       TestPlan testPlan = launcher.discover(request);
       if (!testPlan.containsTests()) {
-        log.accept("warn", "No test found: " + testPlan.getRoots());
-        return -1;
+        warn("No test found: {0}", configuration);
+        if (configuration.isFailIfNoTests()) {
+          return 2;
+        }
       }
+      info("Dry-run");
+      info("Discovered {0} test(s)", testPlan.countTestIdentifiers(TestIdentifier::isTest));
       return 0;
     }
 
@@ -53,30 +75,30 @@ public class Worker implements Callable<Integer> {
     //      launcher.register...(new XmlReportsWritingListener(path, log::error));
     //    }
 
+    debug("Executing launcher...");
     launcher.execute(request);
 
     TestExecutionSummary summary = summaryGeneratingListener.getSummary();
-    long failures = summary.getTotalFailureCount();
-    boolean ok = failures == 0;
 
-    if (ok) {
+    if (summary.getTestsFoundCount() == 0 && configuration.isFailIfNoTests()) {
+      warn("No test found: {0}", configuration);
+      return 2;
+    }
+
+    if (summary.getTotalFailureCount() == 0) {
+      long tests = summary.getTestsSucceededCount();
       long duration = summary.getTimeFinished() - summary.getTimeStarted();
-      log.accept(
-          "info",
-          "Successfully executed "
-              + summary.getTestsSucceededCount()
-              + " test(s) in "
-              + duration
-              + " ms");
+      info("Successfully executed {0} test(s) in {1} ms", tests, duration);
       return 0;
     }
 
+    warn("{0} failure(s) found", summary.getTotalFailureCount());
     StringWriter string = new StringWriter();
     PrintWriter writer = new PrintWriter(string);
     summary.printTo(writer);
     summary.printFailuresTo(writer);
     for (String line : string.toString().split("\\R")) {
-      log.accept("warn", line);
+      warn(line);
     }
     return 1;
   }

@@ -24,6 +24,7 @@ public class Configuration implements Serializable {
   private String workerCoordinates = WORKER_GROUP + ':' + WORKER_ARTIFACT + ':' + WORKER_VERSION;
   private String workerClassName = "de.sormuras.junit.platform.isolator.worker.Worker";
   private boolean dryRun = false;
+  private boolean failIfNoTests = true;
   private boolean platformClassLoader = true;
   private boolean defaultAssertionStatus = true;
   private Map<String, String> parameters = Collections.emptyMap();
@@ -64,6 +65,16 @@ public class Configuration implements Serializable {
   /** Discover tests only, i.e. don't execute them. */
   public Configuration setDryRun(boolean dryRun) {
     this.dryRun = dryRun;
+    return this;
+  }
+
+  public boolean isFailIfNoTests() {
+    return failIfNoTests;
+  }
+
+  /** Fail and return exit status code 2 if no tests are found. */
+  public Configuration setFailIfNoTests(boolean failIfNoTests) {
+    this.failIfNoTests = failIfNoTests;
     return this;
   }
 

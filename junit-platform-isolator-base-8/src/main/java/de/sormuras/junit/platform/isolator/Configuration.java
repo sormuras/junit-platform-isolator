@@ -17,128 +17,204 @@ import java.util.Set;
 /** Isolator configuration. */
 public class Configuration implements Serializable {
 
-  public static final String WORKER_GROUP = "de.sormuras.junit-platform-isolator";
-  public static final String WORKER_ARTIFACT = "junit-platform-isolator-worker";
-  public static final String WORKER_VERSION = implementationVersion("1.0.0-SNAPSHOT");
+  private final Basic basic = new Basic();
+  private final Discovery discovery = new Discovery();
+  private final Launcher launcher = new Launcher();
 
-  private String workerCoordinates = WORKER_GROUP + ':' + WORKER_ARTIFACT + ':' + WORKER_VERSION;
-  private String workerClassName = "de.sormuras.junit.platform.isolator.worker.Worker";
-  private boolean dryRun = false;
-  private boolean failIfNoTests = true;
-  private boolean platformClassLoader = true;
-  private boolean defaultAssertionStatus = true;
-  private Map<String, String> parameters = Collections.emptyMap();
-  private Set<String> selectedClassPathRoots = Collections.emptySet();
+  /** Basic isolator and worker configuration. */
+  public class Basic implements Serializable {
 
-  public boolean isPlatformClassLoader() {
-    return platformClassLoader;
+    final String WORKER_GROUP = "de.sormuras.junit-platform-isolator";
+    final String WORKER_ARTIFACT = "junit-platform-isolator-worker";
+    final String WORKER_VERSION = Isolator.implementationVersion("1.0.0-SNAPSHOT");
+
+    /** Maven coordinates of the artifact providing the worker implementation. */
+    public String workerCoordinates = WORKER_GROUP + ':' + WORKER_ARTIFACT + ':' + WORKER_VERSION;
+
+    /** Class name of the worker to instantiate. */
+    public String workerClassName = "de.sormuras.junit.platform.isolator.worker.Worker";
+
+    /** Discover tests only, i.e. don't execute them. */
+    public boolean dryRun = false;
+
+    /** Fail and return exit status code 2 if no tests are found. */
+    public boolean failIfNoTests = true;
+
+    /** Use platform or thread context classloader. */
+    public boolean platformClassLoader = true;
+
+    /** Enable Java language {@code assert} statements. */
+    public boolean defaultAssertionStatus = true;
+
+    private Basic() {}
+
+    @Override
+    public boolean equals(Object o) {
+      if (this == o) return true;
+      if (!(o instanceof Basic)) return false;
+      Basic basic = (Basic) o;
+      return dryRun == basic.dryRun
+          && failIfNoTests == basic.failIfNoTests
+          && platformClassLoader == basic.platformClassLoader
+          && defaultAssertionStatus == basic.defaultAssertionStatus
+          && workerCoordinates.equals(basic.workerCoordinates)
+          && workerClassName.equals(basic.workerClassName);
+    }
+
+    @Override
+    public int hashCode() {
+      return Objects.hash(
+          workerCoordinates,
+          workerClassName,
+          dryRun,
+          failIfNoTests,
+          platformClassLoader,
+          defaultAssertionStatus);
+    }
+
+    @Override
+    public String toString() {
+      return "Basic{"
+          + "workerCoordinates='"
+          + workerCoordinates
+          + '\''
+          + ", workerClassName='"
+          + workerClassName
+          + '\''
+          + ", dryRun="
+          + dryRun
+          + ", failIfNoTests="
+          + failIfNoTests
+          + ", platformClassLoader="
+          + platformClassLoader
+          + ", defaultAssertionStatus="
+          + defaultAssertionStatus
+          + '}';
+    }
   }
 
-  public Configuration setPlatformClassLoader(boolean platformClassLoader) {
-    this.platformClassLoader = platformClassLoader;
-    return this;
+  /** Launcher discovery request configuration. */
+  public class Discovery implements Serializable {
+
+    /** https://junit.org/junit5/docs/current/user-guide/#running-tests-config-params */
+    public Map<String, String> parameters = Collections.emptyMap();
+
+    /** Select `class-path` roots. */
+    public Set<String> selectedClassPathRoots = Collections.emptySet();
+
+    private Discovery() {}
+
+    @Override
+    public boolean equals(Object o) {
+      if (this == o) return true;
+      if (!(o instanceof Discovery)) return false;
+      Discovery discovery = (Discovery) o;
+      return parameters.equals(discovery.parameters)
+          && selectedClassPathRoots.equals(discovery.selectedClassPathRoots);
+    }
+
+    @Override
+    public int hashCode() {
+      return Objects.hash(parameters, selectedClassPathRoots);
+    }
+
+    @Override
+    public String toString() {
+      return "Discovery{"
+          + "parameters="
+          + parameters
+          + ", selectedClassPathRoots="
+          + selectedClassPathRoots
+          + '}';
+    }
   }
 
-  public String getWorkerCoordinates() {
-    return workerCoordinates;
+  /** Launcher factory configuration. */
+  public class Launcher implements Serializable {
+
+    /**
+     * Determine if test engines should be discovered at runtime using the {@link
+     * java.util.ServiceLoader ServiceLoader} mechanism and automatically registered.
+     */
+    public boolean testEngineAutoRegistration = true;
+
+    /**
+     * Determine if test execution listeners should be discovered at runtime using the {@link
+     * java.util.ServiceLoader ServiceLoader} mechanism and automatically registered.
+     */
+    public boolean testExecutionListenerAutoRegistration = true;
+
+    private Launcher() {}
+
+    @Override
+    public boolean equals(Object o) {
+      if (this == o) return true;
+      if (!(o instanceof Launcher)) return false;
+      Launcher launcher = (Launcher) o;
+      return testEngineAutoRegistration == launcher.testEngineAutoRegistration
+          && testExecutionListenerAutoRegistration
+              == launcher.testExecutionListenerAutoRegistration;
+    }
+
+    @Override
+    public int hashCode() {
+      return Objects.hash(testEngineAutoRegistration, testExecutionListenerAutoRegistration);
+    }
+
+    @Override
+    public String toString() {
+      return "Launcher{"
+          + "testEngineAutoRegistration="
+          + testEngineAutoRegistration
+          + ", testExecutionListenerAutoRegistration="
+          + testExecutionListenerAutoRegistration
+          + '}';
+    }
   }
 
-  public Configuration setWorkerCoordinates(String workerCoordinates) {
-    this.workerCoordinates = workerCoordinates;
-    return this;
+  /** Basic isolator and worker configuration. */
+  public Basic basic() {
+    return basic;
   }
 
-  public String getWorkerClassName() {
-    return workerClassName;
+  /** Launcher discovery request configuration. */
+  public Discovery discovery() {
+    return discovery;
   }
 
-  public Configuration setWorkerClassName(String workerClassName) {
-    this.workerClassName = workerClassName;
-    return this;
-  }
-
-  /** Discover tests only, i.e. don't execute them. */
-  public boolean isDryRun() {
-    return dryRun;
-  }
-
-  /** Discover tests only, i.e. don't execute them. */
-  public Configuration setDryRun(boolean dryRun) {
-    this.dryRun = dryRun;
-    return this;
-  }
-
-  public boolean isFailIfNoTests() {
-    return failIfNoTests;
-  }
-
-  /** Fail and return exit status code 2 if no tests are found. */
-  public Configuration setFailIfNoTests(boolean failIfNoTests) {
-    this.failIfNoTests = failIfNoTests;
-    return this;
-  }
-
-  public boolean isDefaultAssertionStatus() {
-    return defaultAssertionStatus;
-  }
-
-  public Configuration setDefaultAssertionStatus(boolean defaultAssertionStatus) {
-    this.defaultAssertionStatus = defaultAssertionStatus;
-    return this;
-  }
-
-  /** Select `class-path` roots. */
-  public Set<String> getSelectedClassPathRoots() {
-    return selectedClassPathRoots;
-  }
-
-  /** Select `class-path` roots. */
-  public Configuration setSelectedClassPathRoots(Set<String> paths) {
-    this.selectedClassPathRoots = paths;
-    return this;
-  }
-
-  /** https://junit.org/junit5/docs/current/user-guide/#running-tests-config-params */
-  public Map<String, String> getParameters() {
-    return parameters;
-  }
-
-  /** https://junit.org/junit5/docs/current/user-guide/#running-tests-config-params */
-  public Configuration setParameters(Map<String, String> parameters) {
-    this.parameters = parameters;
-    return this;
+  /** Launcher factory configuration. */
+  public Launcher launcher() {
+    return launcher;
   }
 
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
+    if (!(o instanceof Configuration)) return false;
     Configuration that = (Configuration) o;
-    return dryRun == that.dryRun
-        && workerCoordinates.equals(that.workerCoordinates)
-        && workerClassName.equals(that.workerClassName)
-        && parameters.equals(that.parameters)
-        && selectedClassPathRoots.equals(that.selectedClassPathRoots);
+    return basic.equals(that.basic)
+        && discovery.equals(that.discovery)
+        && launcher.equals(that.launcher);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(
-        workerCoordinates, workerClassName, dryRun, parameters, selectedClassPathRoots);
+    return Objects.hash(basic, discovery, launcher);
   }
 
   @Override
   public String toString() {
     return "Configuration{"
-        + "dryRun="
-        + dryRun
-        + ", parameters="
-        + parameters
-        + ", selectedClassPathRoots="
-        + selectedClassPathRoots
+        + "basic="
+        + basic
+        + ", discovery="
+        + discovery
+        + ", launcher="
+        + launcher
         + '}';
   }
 
+  /** Write this configuration into a byte array. */
   public byte[] toBytes() {
     try (ByteArrayOutputStream bos = new ByteArrayOutputStream();
         ObjectOutput out = new ObjectOutputStream(bos)) {
@@ -149,6 +225,7 @@ public class Configuration implements Serializable {
     }
   }
 
+  /** Read configuration from the byte array. */
   public static Configuration fromBytes(byte[] bytes) {
     try (ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
         ObjectInput in = new ObjectInputStream(bis)) {
@@ -159,10 +236,5 @@ public class Configuration implements Serializable {
     } catch (ClassNotFoundException e) {
       throw new AssertionError("Configuration class not found?!", e);
     }
-  }
-
-  static String implementationVersion(String defaultVersion) {
-    String version = Configuration.class.getPackage().getImplementationVersion();
-    return version != null ? version : defaultVersion;
   }
 }

@@ -9,6 +9,12 @@ import java.util.function.BiConsumer;
 
 public class Isolator {
 
+  /** Extract implementation version. */
+  public static String implementationVersion(String defaultVersion) {
+    String version = Configuration.class.getPackage().getImplementationVersion();
+    return version != null ? version : defaultVersion;
+  }
+
   private static final Overlay overlay = OverlaySingleton.INSTANCE;
 
   private final Driver driver;
@@ -18,12 +24,13 @@ public class Isolator {
   }
 
   public int evaluate(Configuration configuration) throws ReflectiveOperationException {
+    Configuration.Basic basic = configuration.basic();
     Thread thread = Thread.currentThread();
     ClassLoader contextClassLoader = thread.getContextClassLoader();
 
     // Create isolated class loaders using driver's paths...
     ClassLoader loader = contextClassLoader;
-    if (configuration.isPlatformClassLoader()) {
+    if (basic.platformClassLoader) {
       loader = overlay.platformClassLoader();
     }
     for (Map.Entry<String, Set<Path>> entry : driver.paths().entrySet()) {
@@ -31,11 +38,11 @@ public class Isolator {
       Set<Path> paths = entry.getValue();
       driver.debug("Creating loader named {0} (parent={1}): ", name, loader, paths);
       loader = overlay.newClassLoader(name, loader, paths);
-      loader.setDefaultAssertionStatus(configuration.isDefaultAssertionStatus());
+      loader.setDefaultAssertionStatus(basic.defaultAssertionStatus);
     }
 
     // Instantiate Worker passing configuration and other arguments...
-    Class<?> workerClass = Class.forName(configuration.getWorkerClassName(), true, loader);
+    Class<?> workerClass = Class.forName(basic.workerClassName, true, loader);
     ClassLoader workerLoader = workerClass.getClassLoader();
     if (workerLoader != loader) {
       driver.warn("{0} was not loaded in isolation: {1}", workerClass, workerLoader);
@@ -60,7 +67,7 @@ public class Isolator {
     }
   }
 
-  void log(String level, String message) {
+  private void log(String level, String message) {
     switch (level) {
       case "debug":
         driver.debug(message);

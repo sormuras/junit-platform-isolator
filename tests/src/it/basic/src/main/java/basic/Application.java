@@ -7,6 +7,6 @@ class Application {
   private final Configuration configuration = new Configuration();
 
   boolean isDryRun() {
-    return configuration.isDryRun();
+    return configuration.basic().dryRun;
   }
 }

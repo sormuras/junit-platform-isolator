@@ -13,11 +13,11 @@ import org.junit.platform.launcher.core.LauncherDiscoveryRequestBuilder;
 
 class LauncherDiscoveryRequestCreator {
 
-  LauncherDiscoveryRequest create(Configuration configuration) {
+  LauncherDiscoveryRequest create(Configuration.Discovery configuration) {
     LauncherDiscoveryRequestBuilder requestBuilder = request();
     // selectors
     Set<Path> classPathRoots = new LinkedHashSet<>();
-    for (String root : configuration.getSelectedClassPathRoots()) {
+    for (String root : configuration.selectedClassPathRoots) {
       classPathRoots.add(Paths.get(root));
     }
     requestBuilder.selectors(selectClasspathRoots(classPathRoots));
@@ -26,7 +26,7 @@ class LauncherDiscoveryRequestCreator {
     //     builder.filters(TagFilter.includeTags(mojo.getTags()));
     //   }
     // parameters
-    requestBuilder.configurationParameters(configuration.getParameters());
+    requestBuilder.configurationParameters(configuration.parameters);
     return requestBuilder.build();
   }
 }

@@ -45,15 +45,17 @@ public class Worker implements Callable<Integer> {
   @Override
   public Integer call() {
     debug("Creating launcher and discovery request...");
-    Launcher launcher = new LauncherCreator().create(configuration);
-    LauncherDiscoveryRequest request = new LauncherDiscoveryRequestCreator().create(configuration);
+    Launcher launcher = new LauncherCreator().create(configuration.launcher());
+    LauncherDiscoveryRequest request =
+        new LauncherDiscoveryRequestCreator().create(configuration.discovery());
 
-    if (configuration.isDryRun()) {
+    Configuration.Basic basic = configuration.basic();
+    if (basic.dryRun) {
       debug("Discover-only in dry-run mode...");
       TestPlan testPlan = launcher.discover(request);
       if (!testPlan.containsTests()) {
         warn("No test found: {0}", configuration);
-        if (configuration.isFailIfNoTests()) {
+        if (basic.failIfNoTests) {
           return 2;
         }
       }
@@ -80,7 +82,7 @@ public class Worker implements Callable<Integer> {
 
     TestExecutionSummary summary = summaryGeneratingListener.getSummary();
 
-    if (summary.getTestsFoundCount() == 0 && configuration.isFailIfNoTests()) {
+    if (summary.getTestsFoundCount() == 0 && basic.failIfNoTests) {
       warn("No test found: {0}", configuration);
       return 2;
     }

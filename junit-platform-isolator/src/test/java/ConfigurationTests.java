@@ -7,7 +7,7 @@ import de.sormuras.junit.platform.isolator.Configuration;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
-import org.junit.jupiter.api.DynamicTest;
+import org.junit.jupiter.api.DynamicNode;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;
 
@@ -18,28 +18,33 @@ class ConfigurationTests {
   }
 
   @TestFactory
-  DynamicTest[] checkAllDefaultValues() {
-    var config = new Configuration();
+  DynamicNode[] checkAllDefaultValues() {
+    var configuration = new Configuration();
+    var basic = configuration.basic();
+    var discovery = configuration.discovery();
+    var launcher = configuration.launcher();
 
-    return new DynamicTest[] {
-      dynamicTest("dryRun", () -> assertFalse(config.isDryRun())),
-      dynamicTest("parameters", () -> assertEmpty(config.getParameters().keySet())),
-      dynamicTest("selectedClassPathRoots", () -> assertEmpty(config.getSelectedClassPathRoots()))
+    return new DynamicNode[] {
+      // basic
+      dynamicTest("dryRun", () -> assertFalse(basic.dryRun)),
+      dynamicTest("failIfNoTests", () -> assertTrue(basic.failIfNoTests)),
+      dynamicTest("workerClassName", () -> assertFalse(basic.workerClassName.isEmpty())),
+      dynamicTest("workerCoordinates", () -> assertFalse(basic.workerCoordinates.isEmpty())),
+      dynamicTest("defaultAssertionStatus", () -> assertTrue(basic.defaultAssertionStatus)),
+      // discovery
+      dynamicTest("parameters", () -> assertEmpty(discovery.parameters.keySet())),
+      dynamicTest("selectedClassPathRoots", () -> assertEmpty(discovery.selectedClassPathRoots)),
+      // launcher
+      dynamicTest("engine", () -> assertTrue(launcher.testEngineAutoRegistration)),
+      dynamicTest("listener", () -> assertTrue(launcher.testExecutionListenerAutoRegistration))
     };
-  }
-
-  @Test
-  void settingDryRun() {
-    var configuration = new Configuration().setDryRun(true);
-    assertTrue(configuration.isDryRun());
   }
 
   @Test
   void serialization() {
     var configuration = new Configuration();
-    configuration.setDryRun(true);
-    configuration.setParameters(Map.of("a", "b"));
-    configuration.setSelectedClassPathRoots(Set.of("a/b"));
+    configuration.discovery().parameters = Map.of("a", "b");
+    configuration.discovery().selectedClassPathRoots = Set.of("a/b");
 
     var bytes = configuration.toBytes();
     var second = Configuration.fromBytes(bytes);

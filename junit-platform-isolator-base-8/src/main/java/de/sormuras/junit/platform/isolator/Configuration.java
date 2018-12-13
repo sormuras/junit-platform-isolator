@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.StringJoiner;
 
 /** Isolator configuration. */
 public class Configuration implements Serializable {
@@ -23,17 +24,11 @@ public class Configuration implements Serializable {
   private final Launcher launcher = new Launcher();
 
   /** Basic isolator and worker configuration. */
-  public class Basic implements Serializable {
+  public static class Basic implements Serializable {
 
     final String WORKER_GROUP = "de.sormuras.junit-platform-isolator";
     final String WORKER_ARTIFACT = "junit-platform-isolator-worker";
     final String WORKER_VERSION = Isolator.implementationVersion("1.0.0-SNAPSHOT");
-
-    /** Maven coordinates of the artifact providing the worker implementation. */
-    public String workerCoordinates = WORKER_GROUP + ':' + WORKER_ARTIFACT + ':' + WORKER_VERSION;
-
-    /** Class name of the worker to instantiate. */
-    public String workerClassName = "de.sormuras.junit.platform.isolator.worker.Worker";
 
     /** Discover tests only, i.e. don't execute them. */
     public boolean dryRun = false;
@@ -46,6 +41,12 @@ public class Configuration implements Serializable {
 
     /** Enable Java language {@code assert} statements. */
     public boolean defaultAssertionStatus = true;
+
+    /** Maven coordinates of the artifact providing the worker implementation. */
+    public String workerCoordinates = WORKER_GROUP + ':' + WORKER_ARTIFACT + ':' + WORKER_VERSION;
+
+    /** Class name of the worker to instantiate. */
+    public String workerClassName = "de.sormuras.junit.platform.isolator.worker.Worker";
 
     private Basic() {}
 
@@ -75,30 +76,19 @@ public class Configuration implements Serializable {
 
     @Override
     public String toString() {
-      return "Basic{"
-          + "workerCoordinates='"
-          + workerCoordinates
-          + '\''
-          + ", workerClassName='"
-          + workerClassName
-          + '\''
-          + ", dryRun="
-          + dryRun
-          + ", failIfNoTests="
-          + failIfNoTests
-          + ", platformClassLoader="
-          + platformClassLoader
-          + ", defaultAssertionStatus="
-          + defaultAssertionStatus
-          + '}';
+      return new StringJoiner(", ", Basic.class.getSimpleName() + "[", "]")
+          .add("dryRun=" + dryRun)
+          .add("failIfNoTests=" + failIfNoTests)
+          .add("platformClassLoader=" + platformClassLoader)
+          .add("defaultAssertionStatus=" + defaultAssertionStatus)
+          .add("workerCoordinates='" + workerCoordinates + "'")
+          .add("workerClassName='" + workerClassName + "'")
+          .toString();
     }
   }
 
   /** Launcher discovery request configuration. */
-  public class Discovery implements Serializable {
-
-    /** https://junit.org/junit5/docs/current/user-guide/#running-tests-config-params */
-    public Map<String, String> parameters = Collections.emptyMap();
+  public static class Discovery implements Serializable {
 
     /** Select `class-path` roots. */
     public Set<String> selectedClasspathRoots = Collections.emptySet();
@@ -106,35 +96,38 @@ public class Configuration implements Serializable {
     /** Tags or tag expressions to <b>include</b> only tests whose tags match. */
     public List<String> filterTagsIncluded = Collections.emptyList();
 
+    /** Configuration Parameters are text-based key-value pairs. */
+    public Map<String, String> parameters = Collections.emptyMap();
+
     private Discovery() {}
 
     @Override
     public boolean equals(Object o) {
       if (this == o) return true;
-      if (!(o instanceof Discovery)) return false;
+      if (o == null || getClass() != o.getClass()) return false;
       Discovery discovery = (Discovery) o;
-      return parameters.equals(discovery.parameters)
-          && selectedClasspathRoots.equals(discovery.selectedClasspathRoots);
+      return selectedClasspathRoots.equals(discovery.selectedClasspathRoots)
+          && filterTagsIncluded.equals(discovery.filterTagsIncluded)
+          && parameters.equals(discovery.parameters);
     }
 
     @Override
     public int hashCode() {
-      return Objects.hash(parameters, selectedClasspathRoots);
+      return Objects.hash(selectedClasspathRoots, filterTagsIncluded, parameters);
     }
 
     @Override
     public String toString() {
-      return "Discovery{"
-          + "parameters="
-          + parameters
-          + ", selectedClassPathRoots="
-          + selectedClasspathRoots
-          + '}';
+      return new StringJoiner(", ", Discovery.class.getSimpleName() + "[", "]")
+          .add("selectedClasspathRoots=" + selectedClasspathRoots)
+          .add("filterTagsIncluded=" + filterTagsIncluded)
+          .add("parameters=" + parameters)
+          .toString();
     }
   }
 
   /** Launcher factory configuration. */
-  public class Launcher implements Serializable {
+  public static class Launcher implements Serializable {
 
     /**
      * Determine if test engines should be discovered at runtime using the {@link
@@ -167,12 +160,10 @@ public class Configuration implements Serializable {
 
     @Override
     public String toString() {
-      return "Launcher{"
-          + "testEngineAutoRegistration="
-          + testEngineAutoRegistration
-          + ", testExecutionListenerAutoRegistration="
-          + testExecutionListenerAutoRegistration
-          + '}';
+      return new StringJoiner(", ", Launcher.class.getSimpleName() + "[", "]")
+          .add("testEngineAutoRegistration=" + testEngineAutoRegistration)
+          .add("testExecutionListenerAutoRegistration=" + testExecutionListenerAutoRegistration)
+          .toString();
     }
   }
 

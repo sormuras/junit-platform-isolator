@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 import de.sormuras.junit.platform.isolator.Configuration;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.junit.jupiter.api.DynamicNode;
@@ -33,7 +34,8 @@ class ConfigurationTests {
       dynamicTest("defaultAssertionStatus", () -> assertTrue(basic.defaultAssertionStatus)),
       // discovery
       dynamicTest("parameters", () -> assertEmpty(discovery.parameters.keySet())),
-      dynamicTest("selectedClassPathRoots", () -> assertEmpty(discovery.selectedClassPathRoots)),
+      dynamicTest("selectedClasspathRoots", () -> assertEmpty(discovery.selectedClasspathRoots)),
+      dynamicTest("filterTagsIncluded", () -> assertEmpty(discovery.filterTagsIncluded)),
       // launcher
       dynamicTest("engine", () -> assertTrue(launcher.testEngineAutoRegistration)),
       dynamicTest("listener", () -> assertTrue(launcher.testExecutionListenerAutoRegistration))
@@ -44,7 +46,8 @@ class ConfigurationTests {
   void serialization() {
     var configuration = new Configuration();
     configuration.discovery().parameters = Map.of("a", "b");
-    configuration.discovery().selectedClassPathRoots = Set.of("a/b");
+    configuration.discovery().selectedClasspathRoots = Set.of("a/b");
+    configuration.discovery().filterTagsIncluded = List.of("x | !y");
 
     var bytes = configuration.toBytes();
     var second = Configuration.fromBytes(bytes);

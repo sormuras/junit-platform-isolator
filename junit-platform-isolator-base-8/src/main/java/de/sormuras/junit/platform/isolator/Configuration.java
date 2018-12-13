@@ -10,6 +10,7 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.io.UncheckedIOException;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -100,7 +101,10 @@ public class Configuration implements Serializable {
     public Map<String, String> parameters = Collections.emptyMap();
 
     /** Select `class-path` roots. */
-    public Set<String> selectedClassPathRoots = Collections.emptySet();
+    public Set<String> selectedClasspathRoots = Collections.emptySet();
+
+    /** Tags or tag expressions to <b>include</b> only tests whose tags match. */
+    public List<String> filterTagsIncluded = Collections.emptyList();
 
     private Discovery() {}
 
@@ -110,12 +114,12 @@ public class Configuration implements Serializable {
       if (!(o instanceof Discovery)) return false;
       Discovery discovery = (Discovery) o;
       return parameters.equals(discovery.parameters)
-          && selectedClassPathRoots.equals(discovery.selectedClassPathRoots);
+          && selectedClasspathRoots.equals(discovery.selectedClasspathRoots);
     }
 
     @Override
     public int hashCode() {
-      return Objects.hash(parameters, selectedClassPathRoots);
+      return Objects.hash(parameters, selectedClasspathRoots);
     }
 
     @Override
@@ -124,7 +128,7 @@ public class Configuration implements Serializable {
           + "parameters="
           + parameters
           + ", selectedClassPathRoots="
-          + selectedClassPathRoots
+          + selectedClasspathRoots
           + '}';
     }
   }

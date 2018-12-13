@@ -1,21 +1,13 @@
 package de.sormuras.junit.platform.isolator.worker;
 
-import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClasspathRoots;
-
 import de.sormuras.junit.platform.isolator.Configuration;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.LinkedHashSet;
-import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.function.BiConsumer;
 import org.junit.platform.launcher.Launcher;
 import org.junit.platform.launcher.LauncherDiscoveryRequest;
 import org.junit.platform.launcher.TestPlan;
-import org.junit.platform.launcher.core.LauncherDiscoveryRequestBuilder;
-import org.junit.platform.launcher.core.LauncherFactory;
 import org.junit.platform.launcher.listeners.SummaryGeneratingListener;
 import org.junit.platform.launcher.listeners.TestExecutionSummary;
 
@@ -33,27 +25,10 @@ public class Worker implements Callable<Integer> {
     this.log = log;
   }
 
-  private LauncherDiscoveryRequest buildRequest() {
-    LauncherDiscoveryRequestBuilder builder = LauncherDiscoveryRequestBuilder.request();
-    // selectors
-    Set<Path> classPathRoots = new LinkedHashSet<>();
-    for (String root : configuration.getSelectedClassPathRoots()) {
-      classPathRoots.add(Paths.get(root));
-    }
-    builder.selectors(selectClasspathRoots(classPathRoots));
-    // TODO filters
-    //   if (!mojo.getTags().isEmpty()) {
-    //     builder.filters(TagFilter.includeTags(mojo.getTags()));
-    //   }
-    // parameters
-    builder.configurationParameters(configuration.getParameters());
-    return builder.build();
-  }
-
   @Override
   public Integer call() {
-    Launcher launcher = LauncherFactory.create();
-    LauncherDiscoveryRequest request = buildRequest();
+    Launcher launcher = new LauncherCreator().create(configuration);
+    LauncherDiscoveryRequest request = new LauncherDiscoveryRequestCreator().create(configuration);
 
     if (configuration.isDryRun()) {
       log.accept("info", "Dry-run.");

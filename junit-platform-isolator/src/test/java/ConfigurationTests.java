@@ -38,12 +38,14 @@ class ConfigurationTests {
       dynamicTest("workerClassName", () -> assertFalse(basic.getWorkerClassName().isEmpty())),
       dynamicTest("workerCoordinates", () -> assertFalse(basic.getWorkerCoordinates().isEmpty())),
       // discovery
-      dynamicTest("parameters", () -> assertEmpty(discovery.parameters.keySet())),
-      dynamicTest("selectedClasspathRoots", () -> assertEmpty(discovery.selectedClasspathRoots)),
-      dynamicTest("filterTagsIncluded", () -> assertEmpty(discovery.filterTagsIncluded)),
+      dynamicTest("parameters", () -> assertEmpty(discovery.getParameters().keySet())),
+      // discovery - selectors
+      dynamicTest("classpathRoots", () -> assertEmpty(discovery.getSelectedClasspathRoots())),
+      // discovery - filters
+      dynamicTest("tagsIncluded", () -> assertEmpty(discovery.getFilterTagsIncluded())),
       // launcher
-      dynamicTest("engine", () -> assertTrue(launcher.testEngineAutoRegistration)),
-      dynamicTest("listener", () -> assertTrue(launcher.testExecutionListenerAutoRegistration))
+      dynamicTest("engine", () -> assertTrue(launcher.isTestEngineAutoRegistration())),
+      dynamicTest("listener", () -> assertTrue(launcher.isTestExecutionListenerAutoRegistration()))
     };
   }
 

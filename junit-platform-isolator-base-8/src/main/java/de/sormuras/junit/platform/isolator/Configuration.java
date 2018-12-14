@@ -103,16 +103,23 @@ public class Configuration implements Serializable {
   /** Launcher discovery request configuration. */
   public static class Discovery implements Serializable {
 
-    /** Select `class-path` roots. */
-    public Set<String> selectedClasspathRoots = Collections.emptySet();
-
-    /** Tags or tag expressions to <b>include</b> only tests whose tags match. */
-    public List<String> filterTagsIncluded = Collections.emptyList();
-
-    /** Configuration Parameters are text-based key-value pairs. */
-    public Map<String, String> parameters = Collections.emptyMap();
+    Set<String> selectedClasspathRoots = Collections.emptySet();
+    List<String> filterTagsIncluded = Collections.emptyList();
+    Map<String, String> parameters = Collections.emptyMap();
 
     private Discovery() {}
+
+    public Set<String> getSelectedClasspathRoots() {
+      return selectedClasspathRoots;
+    }
+
+    public List<String> getFilterTagsIncluded() {
+      return filterTagsIncluded;
+    }
+
+    public Map<String, String> getParameters() {
+      return parameters;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -142,19 +149,18 @@ public class Configuration implements Serializable {
   /** Launcher factory configuration. */
   public static class Launcher implements Serializable {
 
-    /**
-     * Determine if test engines should be discovered at runtime using the {@link
-     * java.util.ServiceLoader ServiceLoader} mechanism and automatically registered.
-     */
-    public boolean testEngineAutoRegistration = true;
-
-    /**
-     * Determine if test execution listeners should be discovered at runtime using the {@link
-     * java.util.ServiceLoader ServiceLoader} mechanism and automatically registered.
-     */
-    public boolean testExecutionListenerAutoRegistration = true;
+    boolean testEngineAutoRegistration = true;
+    boolean testExecutionListenerAutoRegistration = true;
 
     private Launcher() {}
+
+    public boolean isTestEngineAutoRegistration() {
+      return testEngineAutoRegistration;
+    }
+
+    public boolean isTestExecutionListenerAutoRegistration() {
+      return testExecutionListenerAutoRegistration;
+    }
 
     @Override
     public boolean equals(Object o) {

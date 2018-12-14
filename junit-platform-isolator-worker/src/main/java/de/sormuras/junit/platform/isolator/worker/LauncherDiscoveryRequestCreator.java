@@ -20,15 +20,15 @@ class LauncherDiscoveryRequestCreator {
     LauncherDiscoveryRequestBuilder requestBuilder = request();
 
     // selectors
-    checkAsPaths(configuration.selectedClasspathRoots)
+    checkAsPaths(configuration.getSelectedClasspathRoots())
         .ifPresent(roots -> requestBuilder.selectors(selectClasspathRoots(roots)));
 
     // filters
-    checkStrings(configuration.filterTagsIncluded)
+    checkStrings(configuration.getFilterTagsIncluded())
         .ifPresent(tags -> requestBuilder.filters(includeTags(tags)));
 
     // configuration parameters
-    requestBuilder.configurationParameters(configuration.parameters);
+    requestBuilder.configurationParameters(configuration.getParameters());
 
     return requestBuilder.build();
   }

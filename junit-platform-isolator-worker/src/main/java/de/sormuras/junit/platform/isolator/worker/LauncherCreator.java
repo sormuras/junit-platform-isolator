@@ -9,9 +9,9 @@ class LauncherCreator {
 
   Launcher create(Configuration.Launcher configuration) {
     LauncherConfig.Builder builder = LauncherConfig.builder();
-    builder.enableTestEngineAutoRegistration(configuration.testEngineAutoRegistration);
+    builder.enableTestEngineAutoRegistration(configuration.isTestEngineAutoRegistration());
     builder.enableTestExecutionListenerAutoRegistration(
-        configuration.testExecutionListenerAutoRegistration);
+        configuration.isTestExecutionListenerAutoRegistration());
     return LauncherFactory.create(builder.build());
   }
 }

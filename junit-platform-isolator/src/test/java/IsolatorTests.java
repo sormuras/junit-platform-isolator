@@ -1,7 +1,7 @@
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import de.sormuras.junit.platform.isolator.Configuration;
+import de.sormuras.junit.platform.isolator.ConfigurationBuilder;
 import de.sormuras.junit.platform.isolator.Isolator;
 import org.junit.jupiter.api.Test;
 
@@ -16,23 +16,21 @@ class IsolatorTests {
 
   @Test
   void noopWorksUsingThreadContextClassLoader() throws ReflectiveOperationException {
-    var configuration = new Configuration();
-    configuration.basic().dryRun = true;
-    configuration.basic().workerClassName = "NoopWorker";
-    configuration.basic().platformClassLoader = false;
     var isolator = new Isolator(new NoopDriver());
+    var configuration = configureNoop().setPlatformClassLoader(false).build();
 
     assertEquals(0, isolator.evaluate(configuration));
   }
 
   @Test
   void noopThrowsWithPlatformClassLoader() {
-    var configuration = new Configuration();
-    configuration.basic().dryRun = true;
-    configuration.basic().workerClassName = "NoopWorker";
-    configuration.basic().platformClassLoader = true;
     var isolator = new Isolator(new NoopDriver());
+    var configuration = configureNoop().setPlatformClassLoader(true).build();
 
     assertThrows(ReflectiveOperationException.class, () -> isolator.evaluate(configuration));
+  }
+
+  private static ConfigurationBuilder configureNoop() {
+    return new ConfigurationBuilder().setDryRun(true).setWorkerClassName("NoopWorker");
   }
 }

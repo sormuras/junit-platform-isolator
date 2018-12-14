@@ -28,7 +28,7 @@ public class Configuration implements Serializable {
 
     public static final String WORKER_GROUP = "de.sormuras.junit-platform-isolator";
     public static final String WORKER_ARTIFACT = "junit-platform-isolator-worker";
-    public static final String WORKER_VERSION = Isolator.implementationVersion("1.0.0-M3");
+    public static final String WORKER_VERSION = Isolator.implementationVersion("1.0.0-SNAPSHOT");
 
     boolean dryRun = false;
     boolean failIfNoTests = true;

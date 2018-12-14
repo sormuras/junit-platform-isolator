@@ -1,6 +1,8 @@
 package de.sormuras.junit.platform.isolator;
 
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /** Isolator configuration builder. */
 public class ConfigurationBuilder {
@@ -71,6 +73,18 @@ public class ConfigurationBuilder {
     /** Configuration Parameters are text-based key-value pairs. */
     public DiscoveryBuilder setParameters(Map<String, String> parameters) {
       configuration.discovery().parameters = parameters;
+      return this;
+    }
+
+    /** Select `class-path` roots. */
+    public DiscoveryBuilder setSelectedClasspathRoots(Set<String> selectedClasspathRoots) {
+      configuration.discovery().selectedClasspathRoots = selectedClasspathRoots;
+      return this;
+    }
+
+    /** Tags or tag expressions to <b>include</b> only tests whose tags match. */
+    public DiscoveryBuilder setFilterTagsIncluded(List<String> filterTagsIncluded) {
+      configuration.discovery().filterTagsIncluded = filterTagsIncluded;
       return this;
     }
   }

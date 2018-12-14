@@ -1,7 +1,9 @@
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import de.sormuras.junit.platform.isolator.ConfigurationBuilder;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import org.junit.jupiter.api.Test;
 
 class ConfigurationBuilderTests {
@@ -16,6 +18,8 @@ class ConfigurationBuilderTests {
         .setFailIfNoTests(false)
         .setPlatformClassLoader(false)
         .discovery()
+        .setSelectedClasspathRoots(Set.of("target/test-classes"))
+        .setFilterTagsIncluded(List.of("slow"))
         .setParameters(Map.of("smoke", "test"))
         .end()
         .setWorkerCoordinates("local:worker:version")
@@ -39,8 +43,8 @@ class ConfigurationBuilderTests {
             + "workerClassName='NoopWorker'"
             + "], "
             + "discovery=Discovery["
-            + "selectedClasspathRoots=[], "
-            + "filterTagsIncluded=[], "
+            + "selectedClasspathRoots=[target/test-classes], "
+            + "filterTagsIncluded=[slow], "
             + "parameters={smoke=test}"
             + "], "
             + "launcher=Launcher["

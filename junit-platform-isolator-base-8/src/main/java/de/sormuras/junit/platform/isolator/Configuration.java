@@ -26,27 +26,40 @@ public class Configuration implements Serializable {
   /** Basic isolator and worker configuration. */
   public static class Basic implements Serializable {
 
-    final String WORKER_GROUP = "de.sormuras.junit-platform-isolator";
-    final String WORKER_ARTIFACT = "junit-platform-isolator-worker";
-    final String WORKER_VERSION = Isolator.implementationVersion("1.0.0-SNAPSHOT");
+    public static final String WORKER_GROUP = "de.sormuras.junit-platform-isolator";
+    public static final String WORKER_ARTIFACT = "junit-platform-isolator-worker";
+    public static final String WORKER_VERSION = Isolator.implementationVersion("1.0.0-SNAPSHOT");
 
-    /** Discover tests only, i.e. don't execute them. */
-    public boolean dryRun = false;
+    boolean dryRun = false;
+    boolean failIfNoTests = true;
+    boolean platformClassLoader = true;
+    boolean defaultAssertionStatus = true;
+    String workerCoordinates = WORKER_GROUP + ':' + WORKER_ARTIFACT + ':' + WORKER_VERSION;
+    String workerClassName = "de.sormuras.junit.platform.isolator.worker.Worker";
 
-    /** Fail and return exit status code 2 if no tests are found. */
-    public boolean failIfNoTests = true;
+    public boolean isDryRun() {
+      return dryRun;
+    }
 
-    /** Use platform or thread context classloader. */
-    public boolean platformClassLoader = true;
+    public boolean isFailIfNoTests() {
+      return failIfNoTests;
+    }
 
-    /** Enable Java language {@code assert} statements. */
-    public boolean defaultAssertionStatus = true;
+    public boolean isPlatformClassLoader() {
+      return platformClassLoader;
+    }
 
-    /** Maven coordinates of the artifact providing the worker implementation. */
-    public String workerCoordinates = WORKER_GROUP + ':' + WORKER_ARTIFACT + ':' + WORKER_VERSION;
+    public boolean isDefaultAssertionStatus() {
+      return defaultAssertionStatus;
+    }
 
-    /** Class name of the worker to instantiate. */
-    public String workerClassName = "de.sormuras.junit.platform.isolator.worker.Worker";
+    public String getWorkerCoordinates() {
+      return workerCoordinates;
+    }
+
+    public String getWorkerClassName() {
+      return workerClassName;
+    }
 
     private Basic() {}
 

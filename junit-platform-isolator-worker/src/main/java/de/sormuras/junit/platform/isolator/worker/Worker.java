@@ -50,12 +50,12 @@ public class Worker implements Callable<Integer> {
         new LauncherDiscoveryRequestCreator().create(configuration.discovery());
 
     Configuration.Basic basic = configuration.basic();
-    if (basic.dryRun) {
+    if (basic.isDryRun()) {
       debug("Discover-only in dry-run mode...");
       TestPlan testPlan = launcher.discover(request);
       if (!testPlan.containsTests()) {
         warn("No test found: {0}", configuration);
-        if (basic.failIfNoTests) {
+        if (basic.isFailIfNoTests()) {
           return 2;
         }
       }
@@ -82,7 +82,7 @@ public class Worker implements Callable<Integer> {
 
     TestExecutionSummary summary = summaryGeneratingListener.getSummary();
 
-    if (summary.getTestsFoundCount() == 0 && basic.failIfNoTests) {
+    if (summary.getTestsFoundCount() == 0 && basic.isFailIfNoTests()) {
       warn("No test found: {0}", configuration);
       return 2;
     }

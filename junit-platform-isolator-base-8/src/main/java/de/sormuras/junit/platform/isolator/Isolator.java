@@ -30,7 +30,7 @@ public class Isolator {
 
     // Create isolated class loaders using driver's paths...
     ClassLoader loader = contextClassLoader;
-    if (basic.platformClassLoader) {
+    if (basic.isPlatformClassLoader()) {
       loader = overlay.platformClassLoader();
     }
     for (Map.Entry<String, Set<Path>> entry : driver.paths().entrySet()) {
@@ -38,11 +38,11 @@ public class Isolator {
       Set<Path> paths = entry.getValue();
       driver.debug("Creating loader named {0} (parent={1}): ", name, loader, paths);
       loader = overlay.newClassLoader(name, loader, paths);
-      loader.setDefaultAssertionStatus(basic.defaultAssertionStatus);
+      loader.setDefaultAssertionStatus(basic.isDefaultAssertionStatus());
     }
 
     // Instantiate Worker passing configuration and other arguments...
-    Class<?> workerClass = Class.forName(basic.workerClassName, true, loader);
+    Class<?> workerClass = Class.forName(basic.getWorkerClassName(), true, loader);
     ClassLoader workerLoader = workerClass.getClassLoader();
     if (workerLoader != loader) {
       driver.warn("{0} was not loaded in isolation: {1}", workerClass, workerLoader);

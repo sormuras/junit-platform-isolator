@@ -11,7 +11,7 @@ class WorkerTests {
 
   @Test
   void defaultWorkerClassNameIsLoadable() {
-    assertEquals(Worker.class.getName(), configuration.basic().workerClassName);
+    assertEquals(Worker.class.getName(), configuration.basic().getWorkerClassName());
   }
 
   @Test

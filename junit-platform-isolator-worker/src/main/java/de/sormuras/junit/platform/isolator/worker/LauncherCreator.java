@@ -8,6 +8,12 @@ import org.junit.platform.launcher.core.LauncherFactory;
 class LauncherCreator {
 
   Launcher create(Configuration.Launcher configuration) {
+    // TODO Guard against JUnit Platform version < 1.3 ... or drop support for 1.0, 1.1 and 1.2?
+    try {
+      Class.forName("org.junit.platform.launcher.core.LauncherConfig");
+    } catch (ClassNotFoundException e) {
+      return LauncherFactory.create();
+    }
     LauncherConfig.Builder builder = LauncherConfig.builder();
     builder.enableTestEngineAutoRegistration(configuration.isTestEngineAutoRegistration());
     builder.enableTestExecutionListenerAutoRegistration(

@@ -1,5 +1,4 @@
 import de.sormuras.junit.platform.isolator.Driver;
-import de.sormuras.junit.platform.isolator.Version;
 import java.nio.file.Path;
 import java.util.Collections;
 import java.util.Map;

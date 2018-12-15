@@ -28,7 +28,7 @@ class BasicTests {
     var expectedLines =
         List.of(
             ">> BEGIN >>",
-            "[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0",
+            "\\Q[INFO] Successfully executed 2 test(s) in \\E.+ ms",
             ">> MORE LINES >>",
             "[INFO] BUILD SUCCESS",
             ">> END. >>");

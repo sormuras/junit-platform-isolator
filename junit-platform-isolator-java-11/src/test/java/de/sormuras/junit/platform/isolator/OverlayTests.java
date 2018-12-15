@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.net.URL;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 class OverlayTests {
@@ -14,6 +15,7 @@ class OverlayTests {
   private final Overlay overlay = OverlaySingleton.INSTANCE;
 
   @Test
+  @Disabled("exclude junit-platform-isolator-base-8-${version}.jar from 'main' paths")
   void newClassLoaderWithoutUrl() {
     var parent = getClass().getClassLoader();
     var loader = overlay.newClassLoader("name", parent);

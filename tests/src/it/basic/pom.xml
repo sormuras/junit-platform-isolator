@@ -23,21 +23,21 @@
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId> <!-- TODO 'junit-jupiter:5.4.0-M1' -->
+            <artifactId>junit-jupiter-api</artifactId> <!-- TODO 'junit-jupiter:5.4.0-M1' -->
             <version>@junit.jupiter.version@</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
 
     <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <artifactId>maven-surefire-plugin</artifactId>
-                    <version>3.0.0-M1</version>
-                </plugin>
-            </plugins>
-        </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>de.sormuras</groupId>
+                <artifactId>junit-platform-maven-plugin</artifactId>
+                <version>0.811.0</version>
+                <extensions>true</extensions>
+            </plugin>
+        </plugins>
     </build>
 
 </project>

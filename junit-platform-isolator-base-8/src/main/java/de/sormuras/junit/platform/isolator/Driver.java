@@ -17,7 +17,4 @@ public interface Driver {
 
   /** Named paths sets. */
   Map<String, Set<Path>> paths();
-
-  /** Determine string for the supplied version constant. */
-  String version(Version version);
 }

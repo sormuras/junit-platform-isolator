@@ -19,9 +19,4 @@ class NoopDriver implements Driver {
   public Map<String, Set<Path>> paths() {
     return Collections.emptyMap();
   }
-
-  @Override
-  public String version(Version version) {
-    return "<noop>";
-  }
 }

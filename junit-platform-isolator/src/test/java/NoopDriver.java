@@ -18,4 +18,9 @@ class NoopDriver implements Driver {
   public Map<String, Set<Path>> paths() {
     return Collections.emptyMap();
   }
+
+  @Override
+  public boolean isIllegalStateIfWorkerIsNotLoadedInIsolation() {
+    return false;
+  }
 }

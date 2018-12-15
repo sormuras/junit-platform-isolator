@@ -46,7 +46,9 @@ public class Isolator {
     ClassLoader workerLoader = workerClass.getClassLoader();
     if (workerLoader != loader) {
       driver.warn("{0} was not loaded in isolation: {1}", workerClass, workerLoader);
-      throw new IllegalStateException("Isolating worker failed!");
+      if (driver.isIllegalStateIfWorkerIsNotLoadedInIsolation()) {
+        throw new IllegalStateException("Isolating worker failed!");
+      }
     }
     Constructor<?> constructor = workerClass.getConstructor(byte[].class, BiConsumer.class);
     byte[] bytes = configuration.toBytes();

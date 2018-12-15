@@ -17,4 +17,8 @@ public interface Driver {
 
   /** Named paths sets. */
   Map<String, Set<Path>> paths();
+
+  default boolean isIllegalStateIfWorkerIsNotLoadedInIsolation() {
+    return true;
+  }
 }

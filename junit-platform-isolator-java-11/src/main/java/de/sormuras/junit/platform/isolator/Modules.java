@@ -40,8 +40,16 @@ public class Modules {
     return mode;
   }
 
+  public Optional<String> getMainModuleName() {
+    return Optional.ofNullable(getName(mainModuleReference));
+  }
+
   public Optional<ModuleReference> getMainModuleReference() {
     return Optional.ofNullable(mainModuleReference);
+  }
+
+  public Optional<String> getTestModuleName() {
+    return Optional.ofNullable(getName(testModuleReference));
   }
 
   public Optional<ModuleReference> getTestModuleReference() {

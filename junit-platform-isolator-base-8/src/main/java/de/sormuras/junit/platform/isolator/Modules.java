@@ -33,7 +33,15 @@ public class Modules {
     return mode;
   }
 
+  public Optional<String> getMainModuleName() {
+    return Optional.empty();
+  }
+
   public Optional<Object> getMainModuleReference() {
+    return Optional.empty();
+  }
+
+  public Optional<String> getTestModuleName() {
     return Optional.empty();
   }
 

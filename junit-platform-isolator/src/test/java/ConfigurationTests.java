@@ -19,7 +19,7 @@ class ConfigurationTests {
   void checkConstants() {
     assertEquals("de.sormuras.junit-platform-isolator", WORKER_GROUP);
     assertEquals("junit-platform-isolator-worker", WORKER_ARTIFACT);
-    assertEquals("1.0.0-SNAPSHOT", WORKER_VERSION);
+    assertEquals("1.0.0-M5", WORKER_VERSION);
   }
 
   @TestFactory

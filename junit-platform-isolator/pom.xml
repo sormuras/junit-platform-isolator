@@ -25,13 +25,13 @@
 
         <dependency>
             <groupId>de.sormuras.junit-platform-isolator</groupId>
-            <artifactId>junit-platform-isolator-base-8</artifactId>
+            <artifactId>junit-platform-isolator-java-11</artifactId> <!-- 11 first !! -->
             <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>de.sormuras.junit-platform-isolator</groupId>
-            <artifactId>junit-platform-isolator-java-11</artifactId>
+            <artifactId>junit-platform-isolator-base-8</artifactId>
             <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>

@@ -15,9 +15,13 @@ public interface Driver {
   /** Log a message formatted in {@link java.text.MessageFormat} style at warning level. */
   void warn(String format, Object... args);
 
+  /** Log a message formatted in {@link java.text.MessageFormat} style at error level. */
+  void error(String format, Object... args);
+
   /** Named paths sets. */
   Map<String, Set<Path>> paths();
 
+  /** If worker class could not be loaded in isolation: fail. */
   default boolean isIllegalStateIfWorkerIsNotLoadedInIsolation() {
     return true;
   }

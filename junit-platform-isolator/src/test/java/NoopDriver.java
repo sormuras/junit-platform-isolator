@@ -15,6 +15,9 @@ class NoopDriver implements Driver {
   public void warn(String format, Object... args) {}
 
   @Override
+  public void error(String format, Object... args) {}
+
+  @Override
   public Map<String, Set<Path>> paths() {
     return Collections.emptyMap();
   }

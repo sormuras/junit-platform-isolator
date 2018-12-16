@@ -50,6 +50,12 @@ public class ConfigurationBuilder {
     return this;
   }
 
+  /** Base target directory. */
+  public ConfigurationBuilder setTargetDirectory(String targetDirectory) {
+    configuration.basic().targetDirectory = targetDirectory;
+    return this;
+  }
+
   /** Maven coordinates of the artifact providing the worker implementation. */
   public ConfigurationBuilder setWorkerCoordinates(String workerCoordinates) {
     configuration.basic().workerCoordinates = workerCoordinates;
@@ -82,9 +88,27 @@ public class ConfigurationBuilder {
       return this;
     }
 
+    /** Select modules via their names. */
+    public DiscoveryBuilder setSelectedModules(Set<String> selectedModules) {
+      configuration.discovery().selectedModules = selectedModules;
+      return this;
+    }
+
+    /** Select packages via their names. */
+    public DiscoveryBuilder setSelectedPackages(Set<String> selectedPackages) {
+      configuration.discovery().selectedPackages = selectedPackages;
+      return this;
+    }
+
     /** Tags or tag expressions to <b>include</b> only tests whose tags match. */
     public DiscoveryBuilder setFilterTagsIncluded(List<String> filterTagsIncluded) {
       configuration.discovery().filterTagsIncluded = filterTagsIncluded;
+      return this;
+    }
+
+    /** Tags or tag expressions to <b>exclude</b> only tests whose tags match. */
+    public DiscoveryBuilder setFilterTagsExcluded(List<String> filterTagsExcluded) {
+      configuration.discovery().filterTagsExcluded = filterTagsExcluded;
       return this;
     }
   }

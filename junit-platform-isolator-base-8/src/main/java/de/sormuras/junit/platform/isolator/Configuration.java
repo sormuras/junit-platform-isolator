@@ -34,6 +34,7 @@ public class Configuration implements Serializable {
     boolean failIfNoTests = true;
     boolean platformClassLoader = true;
     boolean defaultAssertionStatus = true;
+    String targetDirectory = "target/junit-platform";
     String workerCoordinates = WORKER_GROUP + ':' + WORKER_ARTIFACT + ':' + WORKER_VERSION;
     String workerClassName = "de.sormuras.junit.platform.isolator.worker.Worker";
 
@@ -51,6 +52,10 @@ public class Configuration implements Serializable {
 
     public boolean isDefaultAssertionStatus() {
       return defaultAssertionStatus;
+    }
+
+    public String getTargetDirectory() {
+      return targetDirectory;
     }
 
     public String getWorkerCoordinates() {
@@ -72,6 +77,7 @@ public class Configuration implements Serializable {
           && failIfNoTests == basic.failIfNoTests
           && platformClassLoader == basic.platformClassLoader
           && defaultAssertionStatus == basic.defaultAssertionStatus
+          && targetDirectory.equals(basic.targetDirectory)
           && workerCoordinates.equals(basic.workerCoordinates)
           && workerClassName.equals(basic.workerClassName);
     }
@@ -81,6 +87,7 @@ public class Configuration implements Serializable {
       return Objects.hash(
           workerCoordinates,
           workerClassName,
+          targetDirectory,
           dryRun,
           failIfNoTests,
           platformClassLoader,
@@ -94,6 +101,7 @@ public class Configuration implements Serializable {
           .add("failIfNoTests=" + failIfNoTests)
           .add("platformClassLoader=" + platformClassLoader)
           .add("defaultAssertionStatus=" + defaultAssertionStatus)
+          .add("targetDirectory='" + targetDirectory + "'")
           .add("workerCoordinates='" + workerCoordinates + "'")
           .add("workerClassName='" + workerClassName + "'")
           .toString();
@@ -104,7 +112,12 @@ public class Configuration implements Serializable {
   public static class Discovery implements Serializable {
 
     Set<String> selectedClasspathRoots = Collections.emptySet();
+    Set<String> selectedModules = Collections.emptySet();
+    Set<String> selectedPackages = Collections.emptySet();
+
     List<String> filterTagsIncluded = Collections.emptyList();
+    List<String> filterTagsExcluded = Collections.emptyList();
+
     Map<String, String> parameters = Collections.emptyMap();
 
     private Discovery() {}
@@ -113,8 +126,20 @@ public class Configuration implements Serializable {
       return selectedClasspathRoots;
     }
 
+    public Set<String> getSelectedModules() {
+      return selectedModules;
+    }
+
+    public Set<String> getSelectedPackages() {
+      return selectedPackages;
+    }
+
     public List<String> getFilterTagsIncluded() {
       return filterTagsIncluded;
+    }
+
+    public List<String> getFilterTagsExcluded() {
+      return filterTagsExcluded;
     }
 
     public Map<String, String> getParameters() {
@@ -127,20 +152,32 @@ public class Configuration implements Serializable {
       if (o == null || getClass() != o.getClass()) return false;
       Discovery discovery = (Discovery) o;
       return selectedClasspathRoots.equals(discovery.selectedClasspathRoots)
+          && selectedModules.equals(discovery.selectedModules)
+          && selectedPackages.equals(discovery.selectedPackages)
           && filterTagsIncluded.equals(discovery.filterTagsIncluded)
+          && filterTagsExcluded.equals(discovery.filterTagsExcluded)
           && parameters.equals(discovery.parameters);
     }
 
     @Override
     public int hashCode() {
-      return Objects.hash(selectedClasspathRoots, filterTagsIncluded, parameters);
+      return Objects.hash(
+          selectedClasspathRoots,
+          selectedModules,
+          selectedPackages,
+          filterTagsIncluded,
+          filterTagsExcluded,
+          parameters);
     }
 
     @Override
     public String toString() {
       return new StringJoiner(", ", Discovery.class.getSimpleName() + "[", "]")
           .add("selectedClasspathRoots=" + selectedClasspathRoots)
+          .add("selectedModules=" + selectedModules)
+          .add("selectedPackages=" + selectedPackages)
           .add("filterTagsIncluded=" + filterTagsIncluded)
+          .add("filterTagsExcluded=" + filterTagsExcluded)
           .add("parameters=" + parameters)
           .toString();
     }

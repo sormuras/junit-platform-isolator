@@ -1,7 +1,12 @@
 package de.sormuras.junit.platform.isolator;
 
+import java.io.IOException;
 import java.lang.reflect.Constructor;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Callable;
@@ -27,6 +32,17 @@ public class Isolator {
     Configuration.Basic basic = configuration.basic();
     Thread thread = Thread.currentThread();
     ClassLoader contextClassLoader = thread.getContextClassLoader();
+
+    // Write configuration to log file...
+    Path targetDirectory = Paths.get(basic.getTargetDirectory());
+    if (Files.isDirectory(targetDirectory)) {
+      List<String> lines = Arrays.asList(configuration.toString().split(" "));
+      try {
+        Files.write(targetDirectory.resolve("junit-platform-configuration.txt"), lines);
+      } catch (IOException e) {
+        driver.warn("Writing configuration failed", e.getMessage());
+      }
+    }
 
     // Create isolated class loaders using driver's paths...
     ClassLoader loader = contextClassLoader;

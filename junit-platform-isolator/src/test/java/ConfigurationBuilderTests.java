@@ -1,4 +1,4 @@
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertLinesMatch;
 
 import de.sormuras.junit.platform.isolator.ConfigurationBuilder;
 import java.util.List;
@@ -17,9 +17,13 @@ class ConfigurationBuilderTests {
         .setDefaultAssertionStatus(false)
         .setFailIfNoTests(false)
         .setPlatformClassLoader(false)
+        .setTargetDirectory("bin/junit")
         .discovery()
         .setSelectedClasspathRoots(Set.of("target/test-classes"))
-        .setFilterTagsIncluded(List.of("slow"))
+        .setSelectedModules(Set.of("java.base"))
+        .setSelectedPackages(Set.of("java.lang"))
+        .setFilterTagsIncluded(List.of("fast"))
+        .setFilterTagsExcluded(List.of("slow"))
         .setParameters(Map.of("smoke", "test"))
         .end()
         .setWorkerCoordinates("local:worker:version")
@@ -39,12 +43,16 @@ class ConfigurationBuilderTests {
             + "failIfNoTests=false, "
             + "platformClassLoader=false, "
             + "defaultAssertionStatus=false, "
+            + "targetDirectory='bin/junit', "
             + "workerCoordinates='local:worker:version', "
             + "workerClassName='NoopWorker'"
             + "], "
             + "discovery=Discovery["
             + "selectedClasspathRoots=[target/test-classes], "
-            + "filterTagsIncluded=[slow], "
+            + "selectedModules=[java.base], "
+            + "selectedPackages=[java.lang], "
+            + "filterTagsIncluded=[fast], "
+            + "filterTagsExcluded=[slow], "
             + "parameters={smoke=test}"
             + "], "
             + "launcher=Launcher["
@@ -52,6 +60,10 @@ class ConfigurationBuilderTests {
             + "testExecutionListenerAutoRegistration=false"
             + "]"
             + "}";
-    assertEquals(expected, configuration.toString());
+    assertLinesMatch(lines(expected), lines(configuration.toString()));
+  }
+
+  private static List<String> lines(String string) {
+    return List.of(string.split(" "));
   }
 }

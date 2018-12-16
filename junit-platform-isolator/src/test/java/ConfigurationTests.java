@@ -35,14 +35,20 @@ class ConfigurationTests {
       dynamicTest("failIfNoTests", () -> assertTrue(basic.isFailIfNoTests())),
       dynamicTest("platformClassLoader", () -> assertTrue(basic.isPlatformClassLoader())),
       dynamicTest("defaultAssertionStatus", () -> assertTrue(basic.isDefaultAssertionStatus())),
+      dynamicTest(
+          "targetDirectory",
+          () -> assertEquals("target/junit-platform", basic.getTargetDirectory())),
       dynamicTest("workerClassName", () -> assertFalse(basic.getWorkerClassName().isEmpty())),
       dynamicTest("workerCoordinates", () -> assertFalse(basic.getWorkerCoordinates().isEmpty())),
       // discovery
       dynamicTest("parameters", () -> assertEmpty(discovery.getParameters().keySet())),
       // discovery - selectors
       dynamicTest("classpathRoots", () -> assertEmpty(discovery.getSelectedClasspathRoots())),
+      dynamicTest("modules", () -> assertEmpty(discovery.getSelectedModules())),
+      dynamicTest("packages", () -> assertEmpty(discovery.getSelectedPackages())),
       // discovery - filters
       dynamicTest("tagsIncluded", () -> assertEmpty(discovery.getFilterTagsIncluded())),
+      dynamicTest("tagsExcluded", () -> assertEmpty(discovery.getFilterTagsExcluded())),
       // launcher
       dynamicTest("engine", () -> assertTrue(launcher.isTestEngineAutoRegistration())),
       dynamicTest("listener", () -> assertTrue(launcher.isTestExecutionListenerAutoRegistration()))

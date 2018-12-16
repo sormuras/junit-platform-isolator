@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -49,12 +50,24 @@ public class Isolator {
     if (basic.isPlatformClassLoader()) {
       loader = overlay.platformClassLoader();
     }
-    for (Map.Entry<String, Set<Path>> entry : driver.paths().entrySet()) {
-      String name = entry.getKey();
-      Set<Path> paths = entry.getValue();
-      driver.debug("Creating loader named {0} (parent={1}): ", name, loader, paths);
-      loader = overlay.newClassLoader(name, loader, paths);
-      loader.setDefaultAssertionStatus(basic.isDefaultAssertionStatus());
+
+    Set<String> modules = configuration.discovery().getSelectedModules();
+    if (modules.isEmpty()) {
+      driver.debug("Building non-modular classloader stack: {0} layers", driver.paths().size());
+      for (Map.Entry<String, Set<Path>> entry : driver.paths().entrySet()) {
+        String name = entry.getKey();
+        Set<Path> paths = entry.getValue();
+        loader = overlay.newClassLoader(name, loader, paths);
+        loader.setDefaultAssertionStatus(basic.isDefaultAssertionStatus());
+        driver.debug("Created loader named {0} (parent={1}): ", name, loader, paths);
+      }
+    } else {
+      driver.debug("Test module(s) present: " + modules);
+      // For now, merge all into a single layer...
+      Set<Path> all = new LinkedHashSet<>();
+      driver.paths().values().forEach(all::addAll);
+      Path[] entries = all.toArray(new Path[0]);
+      loader = overlay.newModuleLoader(modules, loader, entries);
     }
 
     // Instantiate Worker passing configuration and other arguments...
@@ -78,7 +91,7 @@ public class Isolator {
       thread.setContextClassLoader(loader);
       return worker.call();
     } catch (Exception e) {
-      driver.warn("Calling worker failed: {0}", e.getMessage());
+      driver.error("Calling worker failed: {0}", e.getMessage());
       throw new RuntimeException("Calling worker failed!", e);
     } finally {
       thread.setContextClassLoader(contextClassLoader);
@@ -95,6 +108,9 @@ public class Isolator {
         return;
       case "warn":
         driver.warn(message);
+        return;
+      case "error":
+        driver.error(message);
         return;
       default:
         driver.warn("[{0}] {1}", level, message);

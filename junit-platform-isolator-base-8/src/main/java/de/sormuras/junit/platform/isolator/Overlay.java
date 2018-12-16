@@ -7,6 +7,7 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Path;
 import java.util.Collection;
+import java.util.Set;
 
 /** Java version-aware helpers. */
 public interface Overlay {
@@ -19,6 +20,9 @@ public interface Overlay {
 
   /** Create new URLClassLoader instance. */
   URLClassLoader newClassLoader(String name, ClassLoader parent, URL... urls);
+
+  /** Create module layer and find the associated classloader instance. */
+  ClassLoader newModuleLoader(Set<String> modules, ClassLoader parent, Path... entries);
 
   /**
    * Get the {@link ClassLoader} providing access to just the classes of the runtime Java platform.

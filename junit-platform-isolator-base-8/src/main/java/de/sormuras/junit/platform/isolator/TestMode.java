@@ -52,7 +52,7 @@ public enum TestMode {
   CLASSIC,
 
   /**
-   * Main module present, test module present: <strong>different</strong> module name.
+   * Main module present or absent, test module present: <strong>different</strong> module name.
    *
    * <p>Treating the main module as a black box, adhering to its exported API.
    */

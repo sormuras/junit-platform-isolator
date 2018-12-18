@@ -1,6 +1,11 @@
 package de.sormuras.junit.platform.isolator;
 
-import java.util.List;
+import static java.util.Arrays.asList;
+import static java.util.Collections.EMPTY_SET;
+
+import java.net.URI;
+import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -71,44 +76,134 @@ public class ConfigurationBuilder {
   /** Nested Launcher Discovery Request Builder. */
   public class DiscoveryBuilder {
 
+    private final Configuration.Discovery discovery = configuration.discovery();
+
     /** Back to enclosing scope. */
     public ConfigurationBuilder end() {
       return ConfigurationBuilder.this;
     }
 
-    /** Configuration Parameters are text-based key-value pairs. */
-    public DiscoveryBuilder setParameters(Map<String, String> parameters) {
-      configuration.discovery().parameters = parameters;
+    // -- selector: uris --
+
+    /** Set selected uris. */
+    public DiscoveryBuilder setSelectedUris(Set<URI> selectedUris) {
+      discovery.selectedUris = selectedUris;
       return this;
     }
 
-    /** Select `class-path` roots. */
-    public DiscoveryBuilder setSelectedClasspathRoots(Set<String> selectedClasspathRoots) {
-      configuration.discovery().selectedClasspathRoots = selectedClasspathRoots;
+    /** Add uris to set of selected uris. */
+    public DiscoveryBuilder addSelectedUris(Collection<URI> uris) {
+      if (discovery.selectedUris == EMPTY_SET) {
+        discovery.selectedUris = new LinkedHashSet<>();
+      }
+      discovery.selectedUris.addAll(uris);
       return this;
     }
 
-    /** Select modules via their names. */
-    public DiscoveryBuilder setSelectedModules(Set<String> selectedModules) {
-      configuration.discovery().selectedModules = selectedModules;
+    /** Add uris to set of selected uris. */
+    public DiscoveryBuilder addSelectedUris(URI... uris) {
+      return addSelectedUris(asList(uris));
+    }
+
+    // -- selector: files --
+
+    /** Set selected files. */
+    public DiscoveryBuilder setSelectedFiles(Set<String> selectedFiles) {
+      discovery.selectedFiles = selectedFiles;
       return this;
     }
+
+    /** Add files to the set of selected files. */
+    public DiscoveryBuilder addSelectedFiles(Collection<String> files) {
+      if (discovery.selectedFiles == EMPTY_SET) {
+        discovery.selectedFiles = new LinkedHashSet<>();
+      }
+      discovery.selectedFiles.addAll(files);
+      return this;
+    }
+
+    /** Add files to the set of selected files. */
+    public DiscoveryBuilder addSelectedFiles(String... files) {
+      return addSelectedFiles(asList(files));
+    }
+
+    // -- selector: directories --
+
+    /** Select directories. */
+    public DiscoveryBuilder setSelectedDirectories(Set<String> selectedDirectories) {
+      discovery.selectedDirectories = selectedDirectories;
+      return this;
+    }
+
+    // -- selector: packages --
 
     /** Select packages via their names. */
     public DiscoveryBuilder setSelectedPackages(Set<String> selectedPackages) {
-      configuration.discovery().selectedPackages = selectedPackages;
+      discovery.selectedPackages = selectedPackages;
       return this;
     }
+
+    // -- selector: classes --
+
+    /** Select classes via their names. */
+    public DiscoveryBuilder setSelectedClasses(Set<String> selectedClasses) {
+      discovery.selectedClasses = selectedClasses;
+      return this;
+    }
+
+    // -- selector: methods --
+
+    /** Select methods via their names. */
+    public DiscoveryBuilder setSelectedMethods(Set<String> selectedMethods) {
+      discovery.selectedMethods = selectedMethods;
+      return this;
+    }
+
+    // -- selector: classpath-resources --
+
+    /** Select `class-path` roots. */
+    public DiscoveryBuilder setSelectedClasspathResources(Set<String> selectedClasspathResources) {
+      discovery.selectedClasspathResources = selectedClasspathResources;
+      return this;
+    }
+
+    // -- selector: classpath-roots --
+
+    /** Select `class-path` roots. */
+    public DiscoveryBuilder setSelectedClasspathRoots(Set<String> selectedClasspathRoots) {
+      discovery.selectedClasspathRoots = selectedClasspathRoots;
+      return this;
+    }
+
+    // -- selector: modules --
+
+    /** Select modules via their names. */
+    public DiscoveryBuilder setSelectedModules(Set<String> selectedModules) {
+      discovery.selectedModules = selectedModules;
+      return this;
+    }
+
+    // -- filter: class name patterns --
+
+    /** Class name filters when scanning class-path elements or modules. */
+    public DiscoveryBuilder setFilterClassNamePatterns(Set<String> filterClassNamePatterns) {
+      discovery.filterClassNamePatterns = filterClassNamePatterns;
+      return this;
+    }
+
+    // -- filter: tag or tag expressions --
 
     /** Tags or tag expressions to <b>include</b> only tests whose tags match. */
-    public DiscoveryBuilder setFilterTagsIncluded(List<String> filterTagsIncluded) {
-      configuration.discovery().filterTagsIncluded = filterTagsIncluded;
+    public DiscoveryBuilder setFilterTags(Set<String> filterTags) {
+      discovery.filterTags = filterTags;
       return this;
     }
 
-    /** Tags or tag expressions to <b>exclude</b> only tests whose tags match. */
-    public DiscoveryBuilder setFilterTagsExcluded(List<String> filterTagsExcluded) {
-      configuration.discovery().filterTagsExcluded = filterTagsExcluded;
+    // -- configuration parameters --
+
+    /** Configuration Parameters are text-based key-value pairs. */
+    public DiscoveryBuilder setParameters(Map<String, String> parameters) {
+      discovery.parameters = parameters;
       return this;
     }
   }

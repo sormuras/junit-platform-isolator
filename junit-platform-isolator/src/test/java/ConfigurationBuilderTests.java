@@ -1,6 +1,8 @@
 import static org.junit.jupiter.api.Assertions.assertLinesMatch;
 
 import de.sormuras.junit.platform.isolator.ConfigurationBuilder;
+
+import java.net.URI;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -19,11 +21,17 @@ class ConfigurationBuilderTests {
         .setPlatformClassLoader(false)
         .setTargetDirectory("bin/junit")
         .discovery()
-        .setSelectedClasspathRoots(Set.of("target/test-classes"))
-        .setSelectedModules(Set.of("java.base"))
+        .setSelectedUris(Set.of(URI.create("https://junit.org")))
+        .setSelectedFiles(Set.of("file"))
+        .setSelectedDirectories(Set.of("directory"))
         .setSelectedPackages(Set.of("java.lang"))
-        .setFilterTagsIncluded(List.of("fast"))
-        .setFilterTagsExcluded(List.of("slow"))
+        .setSelectedClasses(Set.of("java.lang.Object"))
+        .setSelectedMethods(Set.of("java.lang.Object#toString()"))
+        .setSelectedClasspathResources(Set.of("META-INF/MANIFEST.MF"))
+        .setSelectedClasspathRoots(Set.of("target/test-classes"))
+        .setFilterClassNamePatterns(Set.of(".*"))
+        .setSelectedModules(Set.of("java.base"))
+        .setFilterTags(Set.of("fast"))
         .setParameters(Map.of("smoke", "test"))
         .end()
         .setWorkerCoordinates("local:worker:version")
@@ -48,11 +56,17 @@ class ConfigurationBuilderTests {
             + "workerClassName='NoopWorker'"
             + "], "
             + "discovery=Discovery["
+            + "selectedUris=[https://junit.org], "
+            + "selectedFiles=[file], "
+            + "selectedDirectories=[directory], "
+            + "selectedPackages=[java.lang], "
+            + "selectedClasses=[java.lang.Object], "
+            + "selectedMethods=[java.lang.Object#toString()], "
+            + "selectedClasspathResources=[META-INF/MANIFEST.MF], "
             + "selectedClasspathRoots=[target/test-classes], "
             + "selectedModules=[java.base], "
-            + "selectedPackages=[java.lang], "
-            + "filterTagsIncluded=[fast], "
-            + "filterTagsExcluded=[slow], "
+            + "filterClassNamePatterns=[.*], "
+            + "filterTags=[fast], "
             + "parameters={smoke=test}"
             + "], "
             + "launcher=Launcher["

@@ -1,5 +1,9 @@
 package de.sormuras.junit.platform.isolator;
 
+import static java.util.Collections.emptyMap;
+import static java.util.Collections.emptySet;
+import static java.util.Collections.singleton;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -9,8 +13,7 @@ import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.io.UncheckedIOException;
-import java.util.Collections;
-import java.util.List;
+import java.net.URI;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -107,16 +110,50 @@ public class Configuration implements Serializable {
   /** Launcher discovery request configuration. */
   public static class Discovery implements Serializable {
 
-    Set<String> selectedClasspathRoots = Collections.emptySet();
-    Set<String> selectedModules = Collections.emptySet();
-    Set<String> selectedPackages = Collections.emptySet();
+    Set<URI> selectedUris = emptySet();
+    Set<String> selectedFiles = emptySet();
+    Set<String> selectedDirectories = emptySet();
+    Set<String> selectedPackages = emptySet();
+    Set<String> selectedClasses = emptySet();
+    Set<String> selectedMethods = emptySet();
+    Set<String> selectedClasspathResources = emptySet();
+    Set<String> selectedClasspathRoots = emptySet();
+    Set<String> selectedModules = emptySet();
 
-    List<String> filterTagsIncluded = Collections.emptyList();
-    List<String> filterTagsExcluded = Collections.emptyList();
+    Set<String> filterClassNamePatterns = singleton("^(Test.*|.+[.$]Test.*|.*Tests?)$");
+    Set<String> filterTags = emptySet();
 
-    Map<String, String> parameters = Collections.emptyMap();
+    Map<String, String> parameters = emptyMap();
 
     private Discovery() {}
+
+    public Set<URI> getSelectedUris() {
+      return selectedUris;
+    }
+
+    public Set<String> getSelectedFiles() {
+      return selectedFiles;
+    }
+
+    public Set<String> getSelectedDirectories() {
+      return selectedDirectories;
+    }
+
+    public Set<String> getSelectedPackages() {
+      return selectedPackages;
+    }
+
+    public Set<String> getSelectedClasses() {
+      return selectedClasses;
+    }
+
+    public Set<String> getSelectedMethods() {
+      return selectedMethods;
+    }
+
+    public Set<String> getSelectedClasspathResources() {
+      return selectedClasspathResources;
+    }
 
     public Set<String> getSelectedClasspathRoots() {
       return selectedClasspathRoots;
@@ -126,16 +163,12 @@ public class Configuration implements Serializable {
       return selectedModules;
     }
 
-    public Set<String> getSelectedPackages() {
-      return selectedPackages;
+    public Set<String> getFilterClassNamePatterns() {
+      return filterClassNamePatterns;
     }
 
-    public List<String> getFilterTagsIncluded() {
-      return filterTagsIncluded;
-    }
-
-    public List<String> getFilterTagsExcluded() {
-      return filterTagsExcluded;
+    public Set<String> getFilterTags() {
+      return filterTags;
     }
 
     public Map<String, String> getParameters() {
@@ -147,33 +180,51 @@ public class Configuration implements Serializable {
       if (this == o) return true;
       if (o == null || getClass() != o.getClass()) return false;
       Discovery discovery = (Discovery) o;
-      return selectedClasspathRoots.equals(discovery.selectedClasspathRoots)
-          && selectedModules.equals(discovery.selectedModules)
+      return selectedUris.equals(discovery.selectedUris)
+          && selectedFiles.equals(discovery.selectedFiles)
+          && selectedDirectories.equals(discovery.selectedDirectories)
           && selectedPackages.equals(discovery.selectedPackages)
-          && filterTagsIncluded.equals(discovery.filterTagsIncluded)
-          && filterTagsExcluded.equals(discovery.filterTagsExcluded)
+          && selectedClasses.equals(discovery.selectedClasses)
+          && selectedMethods.equals(discovery.selectedMethods)
+          && selectedClasspathResources.equals(discovery.selectedClasspathResources)
+          && selectedClasspathRoots.equals(discovery.selectedClasspathRoots)
+          && selectedModules.equals(discovery.selectedModules)
+          && filterClassNamePatterns.equals(discovery.filterClassNamePatterns)
+          && filterTags.equals(discovery.filterTags)
           && parameters.equals(discovery.parameters);
     }
 
     @Override
     public int hashCode() {
       return Objects.hash(
+          selectedUris,
+          selectedFiles,
+          selectedDirectories,
+          selectedPackages,
+          selectedClasses,
+          selectedMethods,
+          selectedClasspathResources,
           selectedClasspathRoots,
           selectedModules,
-          selectedPackages,
-          filterTagsIncluded,
-          filterTagsExcluded,
+          filterClassNamePatterns,
+          filterTags,
           parameters);
     }
 
     @Override
     public String toString() {
       return new StringJoiner(", ", Discovery.class.getSimpleName() + "[", "]")
+          .add("selectedUris=" + selectedUris)
+          .add("selectedFiles=" + selectedFiles)
+          .add("selectedDirectories=" + selectedDirectories)
+          .add("selectedPackages=" + selectedPackages)
+          .add("selectedClasses=" + selectedClasses)
+          .add("selectedMethods=" + selectedMethods)
+          .add("selectedClasspathResources=" + selectedClasspathResources)
           .add("selectedClasspathRoots=" + selectedClasspathRoots)
           .add("selectedModules=" + selectedModules)
-          .add("selectedPackages=" + selectedPackages)
-          .add("filterTagsIncluded=" + filterTagsIncluded)
-          .add("filterTagsExcluded=" + filterTagsExcluded)
+          .add("filterClassNamePatterns=" + filterClassNamePatterns)
+          .add("filterTags=" + filterTags)
           .add("parameters=" + parameters)
           .toString();
     }

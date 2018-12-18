@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 import de.sormuras.junit.platform.isolator.Configuration;
 import de.sormuras.junit.platform.isolator.ConfigurationBuilder;
-
 import java.net.URI;
 import java.util.Collection;
 import java.util.Map;

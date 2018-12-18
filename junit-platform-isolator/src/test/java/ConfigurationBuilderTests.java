@@ -1,7 +1,6 @@
 import static org.junit.jupiter.api.Assertions.assertLinesMatch;
 
 import de.sormuras.junit.platform.isolator.ConfigurationBuilder;
-
 import java.net.URI;
 import java.util.List;
 import java.util.Map;

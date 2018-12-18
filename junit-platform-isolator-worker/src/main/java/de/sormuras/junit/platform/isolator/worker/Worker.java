@@ -1,5 +1,7 @@
 package de.sormuras.junit.platform.isolator.worker;
 
+import static org.junit.platform.launcher.core.LauncherDiscoveryRequestBuilder.request;
+
 import de.sormuras.junit.platform.isolator.Configuration;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -17,6 +19,7 @@ import org.junit.platform.launcher.Launcher;
 import org.junit.platform.launcher.LauncherDiscoveryRequest;
 import org.junit.platform.launcher.TestIdentifier;
 import org.junit.platform.launcher.TestPlan;
+import org.junit.platform.launcher.core.LauncherDiscoveryRequestBuilder;
 import org.junit.platform.launcher.listeners.SummaryGeneratingListener;
 import org.junit.platform.launcher.listeners.TestExecutionSummary;
 
@@ -53,8 +56,13 @@ public class Worker implements Callable<Integer> {
   public Integer call() {
     debug("Creating launcher and discovery request...");
     Launcher launcher = new LauncherCreator().create(configuration.launcher());
-    LauncherDiscoveryRequest request =
-        new LauncherDiscoveryRequestCreator().create(configuration.discovery());
+    DiscoveryCreator creator = new DiscoveryCreator(configuration.discovery());
+
+    LauncherDiscoveryRequestBuilder requestBuilder = request();
+    requestBuilder.selectors(creator.createDiscoverySelectors());
+    requestBuilder.filters(creator.createFilters());
+    requestBuilder.configurationParameters(configuration.discovery().getParameters());
+    LauncherDiscoveryRequest request = requestBuilder.build();
 
     Configuration.Basic basic = configuration.basic();
     Path targetDirectory = Paths.get(basic.getTargetDirectory());

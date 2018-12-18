@@ -28,7 +28,8 @@ class BasicTests {
     var expectedLines =
         List.of(
             ">> BEGIN >>",
-            "\\Q[INFO] Successfully executed 2 test(s) in \\E.+ ms",
+            "\\Q[INFO] Launching JUnit Platform\\E.*",
+            // "\\Q[INFO] Successfully executed 2 test(s) in \\E.+ ms",
             ">> MORE LINES >>",
             "[INFO] BUILD SUCCESS",
             ">> END. >>");

@@ -36,6 +36,9 @@
                 <artifactId>junit-platform-maven-plugin</artifactId>
                 <version>0.811.2</version>
                 <extensions>true</extensions>
+                <configuration>
+                    <executor>JAVA</executor>
+                </configuration>
             </plugin>
         </plugins>
     </build>

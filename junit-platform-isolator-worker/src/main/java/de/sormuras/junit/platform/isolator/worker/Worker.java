@@ -109,7 +109,7 @@ public class Worker implements Callable<Integer> {
       long tests = summary.getTestsSucceededCount();
       long duration = summary.getTimeFinished() - summary.getTimeStarted();
       info("Successfully executed {0} test(s) in {1} ms", tests, duration);
-      info("Find test run details at " + summaryPath.toAbsolutePath());
+      info("Find test run details at " + summaryPath.toUri());
       return 0;
     }
 
@@ -139,7 +139,7 @@ public class Worker implements Callable<Integer> {
       }
       try {
         Files.write(testPlanPath, testPlanLines);
-        info("Find test plan details at " + testPlanPath.toAbsolutePath());
+        info("Find test plan details at " + testPlanPath.toUri());
       } catch (IOException e) {
         warn("Writing test plan failed", e.getMessage());
       }

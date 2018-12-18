@@ -65,34 +65,33 @@ class DiscoveryCreator {
     List<Filter> filters = new ArrayList<>();
 
     checkStrings(discovery.getFilterClassNamePatterns())
-        .ifPresent(patterns -> filters.add(includeClassNamePatterns(asArray(patterns))));
+        .ifPresent(patterns -> filters.add(includeClassNamePatterns(toStringArray(patterns))));
 
     checkStrings(discovery.getFilterTags())
-        .ifPresent(tags -> filters.add(includeTags(asList(tags))));
+        .ifPresent(tags -> filters.add(includeTags(toList(tags))));
 
     return filters.toArray(new Filter[0]);
   }
 
-  @SuppressWarnings("unchecked")
-  private static <T> T[] asArray(Collection<T> collection) {
-    return (T[]) collection.toArray();
-  }
-
-  private static <T> List<T> asList(Collection<T> collection) {
-    return new ArrayList<>(collection);
-  }
-
-  private static Optional<Set<Path>> checkAsPaths(Set<String> strings) {
+  static Optional<Set<Path>> checkAsPaths(Set<String> strings) {
     if (strings == null || strings.isEmpty()) {
       return Optional.empty();
     }
     return Optional.of(strings.stream().map(Paths::get).collect(toSet()));
   }
 
-  private static <T extends Collection<String>> Optional<T> checkStrings(T strings) {
+  static <T extends Collection<String>> Optional<T> checkStrings(T strings) {
     if (strings == null || strings.isEmpty()) {
       return Optional.empty();
     }
     return Optional.of(strings);
+  }
+
+  static <T> List<T> toList(Collection<T> collection) {
+    return new ArrayList<>(collection);
+  }
+
+  static String[] toStringArray(Collection<String> collection) {
+    return collection.toArray(new String[0]);
   }
 }

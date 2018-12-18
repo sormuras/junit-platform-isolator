@@ -44,11 +44,35 @@
                 <artifactId>fmt-maven-plugin</artifactId>
             </plugin>
             <plugin>
+                <artifactId>maven-clean-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>rm -r target/classes/**/*.class</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>clean</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <excludeDefaultDirectories>true</excludeDefaultDirectories>
+                    <filesets>
+                        <fileset>
+                            <!-- Leave empty directories in place for maven-jar-plugin -->
+                            <directory>target/classes</directory>
+                            <includes>
+                                <include>**/*.class</include>
+                            </includes>
+                        </fileset>
+                    </filesets>
+                    <verbose>true</verbose>
+                </configuration>
+            </plugin>
+            <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>1.6.0</version>
                 <executions>
-
                     <execution>
                         <id>jar --update --release 11</id>
                         <phase>package</phase>

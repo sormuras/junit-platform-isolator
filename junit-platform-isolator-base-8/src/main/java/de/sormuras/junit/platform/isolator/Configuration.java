@@ -26,7 +26,7 @@ public class Configuration implements Serializable {
   /** Basic isolator and worker configuration. */
   public static class Basic implements Serializable {
 
-    public static final String WORKER_GROUP = "de.sormuras.junit-platform-isolator";
+    public static final String WORKER_GROUP = "de.sormuras.junit";
     public static final String WORKER_ARTIFACT = "junit-platform-isolator-worker";
     public static final String WORKER_VERSION = Isolator.implementationVersion("1.0.0-SNAPSHOT");
 

@@ -3,8 +3,8 @@
 [![jdk8](https://img.shields.io/badge/java-8-lightgray.svg)](http://jdk.java.net/8)
 [![jdk11](https://img.shields.io/badge/java-11-blue.svg)](http://jdk.java.net/11)
 [![travis](https://travis-ci.com/sormuras/junit-platform-isolator.svg?branch=master)](https://travis-ci.com/sormuras/junit-platform-isolator)
-[![experimental](https://img.shields.io/badge/api-experimental-yellow.svg)](https://javadoc.io/doc/de.sormuras.junit-platform-isolator/junit-platform-isolator)
-[![central](https://img.shields.io/maven-central/v/de.sormuras.junit-platform-isolator/junit-platform-isolator.svg)](https://search.maven.org/artifact/de.sormuras.junit-platform-isolator/junit-platform-isolator)
+[![experimental](https://img.shields.io/badge/api-experimental-yellow.svg)](https://javadoc.io/doc/de.sormuras.junit/junit-platform-isolator)
+[![central](https://img.shields.io/maven-central/v/de.sormuras.junit/junit-platform-isolator.svg)](https://search.maven.org/artifact/de.sormuras.junit/junit-platform-isolator)
 
 ![isolator](junit-platform-isolator.png)
 

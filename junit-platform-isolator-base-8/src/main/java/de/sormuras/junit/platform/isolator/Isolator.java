@@ -15,12 +15,6 @@ import java.util.function.BiConsumer;
 
 public class Isolator {
 
-  /** Extract implementation version. */
-  public static String implementationVersion(String defaultVersion) {
-    String version = Configuration.class.getPackage().getImplementationVersion();
-    return version != null ? version : defaultVersion;
-  }
-
   private static final Overlay overlay = OverlaySingleton.INSTANCE;
 
   private final Driver driver;

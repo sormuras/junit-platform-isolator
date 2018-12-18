@@ -1,5 +1,7 @@
 package de.sormuras.junit.platform.isolator;
 
+import static de.sormuras.junit.platform.isolator.GroupArtifact.ISOLATOR;
+import static de.sormuras.junit.platform.isolator.GroupArtifact.ISOLATOR_WORKER;
 import static de.sormuras.junit.platform.isolator.GroupArtifact.JUNIT_JUPITER_API;
 import static de.sormuras.junit.platform.isolator.GroupArtifact.JUNIT_JUPITER_ENGINE;
 import static de.sormuras.junit.platform.isolator.GroupArtifact.JUNIT_PLATFORM_COMMONS;
@@ -14,6 +16,9 @@ import java.util.function.UnaryOperator;
 
 /** Maven artifact version defaults. */
 public enum Version {
+  /** {@code isolator.version} */
+  ISOLATOR_VERSION(implementationVersion("1.0.0-SNAPSHOT"), ISOLATOR, ISOLATOR_WORKER),
+
   /** {@code junit.platform.version} */
   JUNIT_PLATFORM_VERSION("1.3.2", JUNIT_PLATFORM_COMMONS),
 
@@ -43,6 +48,12 @@ public enum Version {
 
   public static void forEach(Consumer<Version> versionConsumer) {
     Arrays.stream(values()).sorted().forEach(versionConsumer);
+  }
+
+  /** Extract implementation version. */
+  public static String implementationVersion(String defaultVersion) {
+    String version = Version.class.getPackage().getImplementationVersion();
+    return version != null ? version : defaultVersion;
   }
 
   private final String key;

@@ -4,6 +4,10 @@ import java.util.function.Function;
 
 /** Maven group and artifact coordinates. */
 public enum GroupArtifact {
+  ISOLATOR("de.sormuras.junit", "junit-platform-isolator", "ISOLATOR"),
+
+  ISOLATOR_WORKER("de.sormuras.junit", "junit-platform-isolator-worker", "ISOLATOR"),
+
   JUNIT_JUPITER_API("org.junit.jupiter", "junit-jupiter-api", "JUNIT_JUPITER"),
 
   JUNIT_JUPITER_ENGINE("org.junit.jupiter", "junit-jupiter-engine", "JUNIT_JUPITER"),
@@ -40,11 +44,21 @@ public enum GroupArtifact {
     return Version.valueOf(versionName); // lazy
   }
 
+  /**
+   * Returns a {@link String} that consists of the group and artifact separated by colon.
+   *
+   * @return {@code group + ':' + artifact}
+   */
+  @Override
   public String toString() {
     return string;
   }
 
   public String toString(Function<Version, String> version) {
     return string + ':' + version.apply(getVersion());
+  }
+
+  public String toStringWithDefaultVersion() {
+    return string + ':' + getVersion().getDefaultVersion();
   }
 }

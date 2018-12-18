@@ -1,4 +1,3 @@
-import static de.sormuras.junit.platform.isolator.Configuration.Basic.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
@@ -14,13 +13,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;
 
 class ConfigurationTests {
-
-  @Test
-  void checkConstants() {
-    assertEquals("de.sormuras.junit-platform-isolator", WORKER_GROUP);
-    assertEquals("junit-platform-isolator-worker", WORKER_ARTIFACT);
-    assertEquals("1.0.0-SNAPSHOT", WORKER_VERSION);
-  }
 
   @TestFactory
   DynamicNode[] checkAllDefaultValues() {

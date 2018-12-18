@@ -11,13 +11,6 @@ import org.junit.jupiter.api.Test;
 class IsolatorTests {
 
   @Test
-  void implementationVersion() {
-    var version = Isolator.class.getPackage().getImplementationVersion();
-    var expected = version != null ? version : "4711";
-    assertEquals(expected, Isolator.implementationVersion("4711"));
-  }
-
-  @Test
   void noopWorksUsingThreadContextClassLoader() throws ReflectiveOperationException {
     var isolator = new Isolator(new NoopDriver());
     var configuration = configureNoop().setPlatformClassLoader(false).build();

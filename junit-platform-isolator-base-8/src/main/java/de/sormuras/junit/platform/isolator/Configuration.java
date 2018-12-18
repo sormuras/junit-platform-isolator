@@ -26,16 +26,12 @@ public class Configuration implements Serializable {
   /** Basic isolator and worker configuration. */
   public static class Basic implements Serializable {
 
-    public static final String WORKER_GROUP = "de.sormuras.junit";
-    public static final String WORKER_ARTIFACT = "junit-platform-isolator-worker";
-    public static final String WORKER_VERSION = Isolator.implementationVersion("1.0.0-SNAPSHOT");
-
     boolean dryRun = false;
     boolean failIfNoTests = true;
     boolean platformClassLoader = true;
     boolean defaultAssertionStatus = true;
     String targetDirectory = "target/junit-platform";
-    String workerCoordinates = WORKER_GROUP + ':' + WORKER_ARTIFACT + ':' + WORKER_VERSION;
+    String workerCoordinates = GroupArtifact.ISOLATOR_WORKER.toStringWithDefaultVersion();
     String workerClassName = "de.sormuras.junit.platform.isolator.worker.Worker";
 
     public boolean isDryRun() {

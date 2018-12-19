@@ -19,6 +19,15 @@
         <maven.deploy.skip>true</maven.deploy.skip>
     </properties>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-engine</artifactId>
+            <version>${junit.platform.version}</version>
+            <scope>provided</scope> <!-- Don't leak into 3rd-party projects! -->
+        </dependency>
+    </dependencies>
+
     <build>
         <plugins>
             <plugin>

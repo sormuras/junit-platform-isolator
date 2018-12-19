@@ -3,6 +3,7 @@ package de.sormuras.junit.platform.isolator;
 import static java.util.Collections.emptyMap;
 import static java.util.Collections.emptySet;
 import static java.util.Collections.singleton;
+import static org.junit.platform.engine.discovery.ClassNameFilter.STANDARD_INCLUDE_PATTERN;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -14,6 +15,7 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.io.UncheckedIOException;
 import java.net.URI;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -110,6 +112,8 @@ public class Configuration implements Serializable {
   /** Launcher discovery request configuration. */
   public static class Discovery implements Serializable {
 
+    private static Set<String> DEFAULT_CLASS_NAME_PATTERN = singleton(STANDARD_INCLUDE_PATTERN);
+
     Set<URI> selectedUris = emptySet();
     Set<String> selectedFiles = emptySet();
     Set<String> selectedDirectories = emptySet();
@@ -120,7 +124,7 @@ public class Configuration implements Serializable {
     Set<String> selectedClasspathRoots = emptySet();
     Set<String> selectedModules = emptySet();
 
-    Set<String> filterClassNamePatterns = singleton("^(Test.*|.+[.$]Test.*|.*Tests?)$");
+    Set<String> filterClassNamePatterns = new LinkedHashSet<>(DEFAULT_CLASS_NAME_PATTERN);
     Set<String> filterTags = emptySet();
 
     Map<String, String> parameters = emptyMap();

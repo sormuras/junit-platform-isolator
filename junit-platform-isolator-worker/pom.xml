@@ -54,11 +54,11 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>de.sormuras</groupId>
+                <groupId>de.sormuras.junit</groupId>
                 <artifactId>junit-platform-maven-plugin</artifactId>
                 <extensions>true</extensions>
                 <configuration>
-                    <isolate>false</isolate><!-- prevent cyclic exceptions -->
+                    <isolation>NONE</isolation> <!-- prevent cyclic exceptions -->
                 </configuration>
             </plugin>
         </plugins>

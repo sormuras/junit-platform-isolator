@@ -1,4 +1,6 @@
-import static org.junit.jupiter.api.Assertions.*;
+import static java.util.Collections.emptySet;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
@@ -61,15 +63,18 @@ class ConfigurationTests {
     var configuration =
         new ConfigurationBuilder()
             .discovery()
-            .addSelectedUris(Set.of(URI.create("https://junit.org")))
             .addSelectedUris(URI.create("https://junit.org"))
-            .addSelectedFiles(Set.of("a"))
             .addSelectedFiles("b")
-            .setSelectedDirectories(Set.of("a", "b"))
-            .setSelectedPackages(Set.of(""))
-            .setSelectedClasspathRoots(Set.of("a/b"))
-            .setFilterTags(Set.of("x | !y"))
-            .setParameters(Map.of("a", "b"))
+            .addSelectedDirectories("a", "b")
+            .addSelectedPackages("a", "b")
+            .addSelectedClasses("A", "B")
+            .addSelectedMethods("A.a()", "B.b()")
+            .addSelectedClasspathResources("a/b")
+            .addSelectedClasspathRoots("a", "b")
+            .addSelectedModules("a", "b")
+            .addFilterClassNamePatterns(".*")
+            .addFilterTags("x", "!y")
+            .addParameter("a", "b")
             .end()
             .setDryRun(true)
             .build();
@@ -77,6 +82,48 @@ class ConfigurationTests {
     var bytes = configuration.toBytes();
     var second = Configuration.fromBytes(bytes);
     assertEquals(configuration, second);
+  }
+
+  @Test
+  void equality() {
+    var add =
+        new ConfigurationBuilder()
+            .discovery()
+            .addSelectedUris(Set.of(URI.create("https://junit.org")))
+            .addSelectedFiles(Set.of("file"))
+            .addSelectedDirectories(Set.of("directory"))
+            .addSelectedPackages(Set.of("java.lang"))
+            .addSelectedClasses(Set.of("java.lang.Object"))
+            .addSelectedMethods(Set.of("java.lang.Object#toString()"))
+            .addSelectedClasspathResources(Set.of("META-INF/MANIFEST.MF"))
+            .addSelectedClasspathRoots(Set.of("target/test-classes"))
+            .addSelectedModules(Set.of("java.base"))
+            .setFilterClassNamePatterns(emptySet())
+            .addFilterClassNamePatterns(Set.of(".*"))
+            .addFilterTags(Set.of("fast"))
+            .addParameter("smoke", "test")
+            .end()
+            .build();
+
+    var set =
+        new ConfigurationBuilder()
+            .discovery()
+            .setSelectedUris(Set.of(URI.create("https://junit.org")))
+            .setSelectedFiles(Set.of("file"))
+            .setSelectedDirectories(Set.of("directory"))
+            .setSelectedPackages(Set.of("java.lang"))
+            .setSelectedClasses(Set.of("java.lang.Object"))
+            .setSelectedMethods(Set.of("java.lang.Object#toString()"))
+            .setSelectedClasspathResources(Set.of("META-INF/MANIFEST.MF"))
+            .setSelectedClasspathRoots(Set.of("target/test-classes"))
+            .setSelectedModules(Set.of("java.base"))
+            .setFilterClassNamePatterns(Set.of(".*"))
+            .setFilterTags(Set.of("fast"))
+            .setParameters(Map.of("smoke", "test"))
+            .end()
+            .build();
+
+    assertEquals(add, set);
   }
 
   private static void assertEmpty(Collection<?> collection) {

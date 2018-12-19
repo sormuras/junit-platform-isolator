@@ -5,6 +5,8 @@ import static java.util.Collections.EMPTY_SET;
 
 import java.net.URI;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
@@ -94,7 +96,7 @@ public class ConfigurationBuilder {
     /** Add uris to set of selected uris. */
     public DiscoveryBuilder addSelectedUris(Collection<URI> uris) {
       if (discovery.selectedUris == EMPTY_SET) {
-        discovery.selectedUris = new LinkedHashSet<>();
+        return setSelectedUris(new LinkedHashSet<>(uris));
       }
       discovery.selectedUris.addAll(uris);
       return this;
@@ -116,7 +118,7 @@ public class ConfigurationBuilder {
     /** Add files to the set of selected files. */
     public DiscoveryBuilder addSelectedFiles(Collection<String> files) {
       if (discovery.selectedFiles == EMPTY_SET) {
-        discovery.selectedFiles = new LinkedHashSet<>();
+        return setSelectedFiles(new LinkedHashSet<>(files));
       }
       discovery.selectedFiles.addAll(files);
       return this;
@@ -135,12 +137,40 @@ public class ConfigurationBuilder {
       return this;
     }
 
+    /** Add directories to the set of selected directories. */
+    public DiscoveryBuilder addSelectedDirectories(Collection<String> directories) {
+      if (discovery.selectedDirectories == EMPTY_SET) {
+        return setSelectedDirectories(new LinkedHashSet<>(directories));
+      }
+      discovery.selectedDirectories.addAll(directories);
+      return this;
+    }
+
+    /** Add directories to the set of selected directories. */
+    public DiscoveryBuilder addSelectedDirectories(String... directories) {
+      return addSelectedDirectories(asList(directories));
+    }
+
     // -- selector: packages --
 
     /** Select packages via their names. */
     public DiscoveryBuilder setSelectedPackages(Set<String> selectedPackages) {
       discovery.selectedPackages = selectedPackages;
       return this;
+    }
+
+    /** Add packages to the set of selected packages. */
+    public DiscoveryBuilder addSelectedPackages(Collection<String> packages) {
+      if (discovery.selectedPackages == EMPTY_SET) {
+        return setSelectedPackages(new LinkedHashSet<>(packages));
+      }
+      discovery.selectedPackages.addAll(packages);
+      return this;
+    }
+
+    /** Add packages to the set of selected packages. */
+    public DiscoveryBuilder addSelectedPackages(String... packages) {
+      return addSelectedPackages(asList(packages));
     }
 
     // -- selector: classes --
@@ -151,6 +181,20 @@ public class ConfigurationBuilder {
       return this;
     }
 
+    /** Add classes to the set of selected classes. */
+    public DiscoveryBuilder addSelectedClasses(Collection<String> classes) {
+      if (discovery.selectedClasses == EMPTY_SET) {
+        return setSelectedClasses(new LinkedHashSet<>(classes));
+      }
+      discovery.selectedClasses.addAll(classes);
+      return this;
+    }
+
+    /** Add classes to the set of selected classes. */
+    public DiscoveryBuilder addSelectedClasses(String... classes) {
+      return addSelectedClasses(asList(classes));
+    }
+
     // -- selector: methods --
 
     /** Select methods via their names. */
@@ -159,12 +203,40 @@ public class ConfigurationBuilder {
       return this;
     }
 
+    /** Add methods to the set of selected methods. */
+    public DiscoveryBuilder addSelectedMethods(Collection<String> methods) {
+      if (discovery.selectedMethods == EMPTY_SET) {
+        return setSelectedMethods(new LinkedHashSet<>(methods));
+      }
+      discovery.selectedMethods.addAll(methods);
+      return this;
+    }
+
+    /** Add methods to the set of selected methods. */
+    public DiscoveryBuilder addSelectedMethods(String... methods) {
+      return addSelectedMethods(asList(methods));
+    }
+
     // -- selector: classpath-resources --
 
-    /** Select `class-path` roots. */
+    /** Select `class-path` resources. */
     public DiscoveryBuilder setSelectedClasspathResources(Set<String> selectedClasspathResources) {
       discovery.selectedClasspathResources = selectedClasspathResources;
       return this;
+    }
+
+    /** Add resources to the set of selected resources. */
+    public DiscoveryBuilder addSelectedClasspathResources(Collection<String> resources) {
+      if (discovery.selectedClasspathResources == EMPTY_SET) {
+        return setSelectedClasspathResources(new LinkedHashSet<>(resources));
+      }
+      discovery.selectedClasspathResources.addAll(resources);
+      return this;
+    }
+
+    /** Add resources to the set of selected resources. */
+    public DiscoveryBuilder addSelectedClasspathResources(String... resources) {
+      return addSelectedClasspathResources(asList(resources));
     }
 
     // -- selector: classpath-roots --
@@ -175,12 +247,40 @@ public class ConfigurationBuilder {
       return this;
     }
 
+    /** Add roots to the set of selected roots. */
+    public DiscoveryBuilder addSelectedClasspathRoots(Collection<String> roots) {
+      if (discovery.selectedClasspathRoots == EMPTY_SET) {
+        return setSelectedClasspathRoots(new LinkedHashSet<>(roots));
+      }
+      discovery.selectedClasspathRoots.addAll(roots);
+      return this;
+    }
+
+    /** Add roots to the set of selected roots. */
+    public DiscoveryBuilder addSelectedClasspathRoots(String... roots) {
+      return addSelectedClasspathRoots(asList(roots));
+    }
+
     // -- selector: modules --
 
     /** Select modules via their names. */
     public DiscoveryBuilder setSelectedModules(Set<String> selectedModules) {
       discovery.selectedModules = selectedModules;
       return this;
+    }
+
+    /** Add modules to the set of selected modules. */
+    public DiscoveryBuilder addSelectedModules(Collection<String> modules) {
+      if (discovery.selectedModules == EMPTY_SET) {
+        return setSelectedModules(new LinkedHashSet<>(modules));
+      }
+      discovery.selectedModules.addAll(modules);
+      return this;
+    }
+
+    /** Add modules to the set of selected modules. */
+    public DiscoveryBuilder addSelectedModules(String... modules) {
+      return addSelectedModules(asList(modules));
     }
 
     // -- filter: class name patterns --
@@ -191,6 +291,20 @@ public class ConfigurationBuilder {
       return this;
     }
 
+    /** Add patterns to the set of patterns. */
+    public DiscoveryBuilder addFilterClassNamePatterns(Collection<String> patterns) {
+      if (discovery.filterClassNamePatterns == EMPTY_SET) {
+        return setFilterClassNamePatterns(new LinkedHashSet<>(patterns));
+      }
+      discovery.filterClassNamePatterns.addAll(patterns);
+      return this;
+    }
+
+    /** Add patterns to the set of patterns. */
+    public DiscoveryBuilder addFilterClassNamePatterns(String... patterns) {
+      return addFilterClassNamePatterns(asList(patterns));
+    }
+
     // -- filter: tag or tag expressions --
 
     /** Tags or tag expressions to <b>include</b> only tests whose tags match. */
@@ -199,11 +313,34 @@ public class ConfigurationBuilder {
       return this;
     }
 
+    /** Add tags or tag expressions to the set of tags. */
+    public DiscoveryBuilder addFilterTags(Collection<String> tags) {
+      if (discovery.filterTags == EMPTY_SET) {
+        return setFilterTags(new LinkedHashSet<>(tags));
+      }
+      discovery.filterTags.addAll(tags);
+      return this;
+    }
+
+    /** Add tags or tag expressions to the set of tags. */
+    public DiscoveryBuilder addFilterTags(String... tags) {
+      return addFilterTags(asList(tags));
+    }
+
     // -- configuration parameters --
 
-    /** Configuration Parameters are text-based key-value pairs. */
+    /** Set configuration parameters. */
     public DiscoveryBuilder setParameters(Map<String, String> parameters) {
       discovery.parameters = parameters;
+      return this;
+    }
+
+    /** Put configuration parameter. */
+    public DiscoveryBuilder addParameter(String key, String value) {
+      if (discovery.parameters == Collections.EMPTY_MAP) {
+        discovery.parameters = new LinkedHashMap<>();
+      }
+      discovery.parameters.put(key, value);
       return this;
     }
   }

@@ -55,7 +55,7 @@ public class Isolator {
         Set<Path> paths = entry.getValue();
         loader = overlay.newClassLoader(name, loader, paths);
         loader.setDefaultAssertionStatus(basic.isDefaultAssertionStatus());
-        driver.debug("Created loader named {0} (parent={1}): ", name, loader, paths);
+        driver.debug("Created loader named {0} (parent={1}): {2}", name, loader, paths);
       }
     } else {
       driver.debug("Test module(s) present: " + modules);

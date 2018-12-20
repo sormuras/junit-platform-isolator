@@ -9,6 +9,7 @@ class LauncherCreator {
 
   Launcher create(Configuration.Launcher configuration) {
     // TODO Guard against JUnit Platform version < 1.3 ... or drop support for 1.0, 1.1 and 1.2?
+    //      https://github.com/sormuras/junit-platform-isolator/issues/8
     try {
       Class.forName("org.junit.platform.launcher.core.LauncherConfig");
     } catch (ClassNotFoundException e) {

@@ -17,6 +17,8 @@ public class Isolator {
 
   private static final Overlay overlay = OverlaySingleton.INSTANCE;
 
+  private static final String LOG_MESSAGE_PREFIX = "[WORKER] ";
+
   private final Driver driver;
 
   public Isolator(Driver driver) {
@@ -57,7 +59,8 @@ public class Isolator {
       }
     } else {
       driver.debug("Test module(s) present: " + modules);
-      // For now, merge all into a single layer...
+      // TODO For now, merge all into a single layer...
+      //      https://github.com/sormuras/junit-platform-isolator/issues/9
       Set<Path> all = new LinkedHashSet<>();
       driver.paths().values().forEach(all::addAll);
       Path[] entries = all.toArray(new Path[0]);
@@ -75,7 +78,7 @@ public class Isolator {
     }
     Constructor<?> constructor = workerClass.getConstructor(byte[].class, BiConsumer.class);
     byte[] bytes = configuration.toBytes();
-    BiConsumer<String, String> log = this::log;
+    BiConsumer<String, String> log = this::workerLogFunction;
     @SuppressWarnings("unchecked")
     Callable<Integer> worker = (Callable<Integer>) constructor.newInstance(bytes, log);
     driver.debug("Instantiated {0}", worker);
@@ -92,22 +95,22 @@ public class Isolator {
     }
   }
 
-  private void log(String level, String message) {
+  private void workerLogFunction(String level, String message) {
     switch (level) {
       case "debug":
-        driver.debug(message);
+        driver.debug(LOG_MESSAGE_PREFIX + message);
         return;
       case "info":
-        driver.info(message);
+        driver.info(LOG_MESSAGE_PREFIX + message);
         return;
       case "warn":
-        driver.warn(message);
+        driver.warn(LOG_MESSAGE_PREFIX + message);
         return;
       case "error":
-        driver.error(message);
+        driver.error(LOG_MESSAGE_PREFIX + message);
         return;
       default:
-        driver.warn("[{0}] {1}", level, message);
+        driver.warn(LOG_MESSAGE_PREFIX + "[{0}] {1}", level, message);
     }
   }
 }

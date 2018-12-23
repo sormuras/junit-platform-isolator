@@ -172,4 +172,20 @@
         </repository>
     </distributionManagement>
 
+    <!--
+    TODO Automate parts of release steps
+        1. . clean + /tests clean
+        2. Replace in Path "X.Y.Z-SNAPSHOT" with "X.Y.Z" (6x pom.xml, 3x *.java)
+        3. . clean format install
+        4. tests/ clean format verify
+        5. Commit and tag "X.Y.Z"
+        6. . deploy
+        7. Push with all tags
+        8. Revert 2. or Replace in Path "X.Y.Z" with "next-SNAPSHOT" (6x pom.xml, 3x *.java)
+        9. Commit and Push
+        -
+        10. Sync to Maven Central https://bintray.com/sormuras/maven/junit-platform-isolator/ X.Y.Z
+        11. Create Release at https://github.com/sormuras/junit-platform-isolator/tags /X.Y.Z
+    -->
+
 </project>

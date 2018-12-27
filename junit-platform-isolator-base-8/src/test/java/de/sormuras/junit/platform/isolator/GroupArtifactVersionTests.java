@@ -16,11 +16,13 @@ package de.sormuras.junit.platform.isolator;
 
 import static de.sormuras.junit.platform.isolator.GroupArtifact.ISOLATOR;
 import static de.sormuras.junit.platform.isolator.GroupArtifact.ISOLATOR_WORKER;
+import static de.sormuras.junit.platform.isolator.GroupArtifact.JUNIT_JUPITER;
 import static de.sormuras.junit.platform.isolator.GroupArtifact.JUNIT_JUPITER_API;
 import static de.sormuras.junit.platform.isolator.GroupArtifact.JUNIT_JUPITER_ENGINE;
 import static de.sormuras.junit.platform.isolator.GroupArtifact.JUNIT_PLATFORM_COMMONS;
 import static de.sormuras.junit.platform.isolator.GroupArtifact.JUNIT_PLATFORM_CONSOLE;
 import static de.sormuras.junit.platform.isolator.GroupArtifact.JUNIT_PLATFORM_LAUNCHER;
+import static de.sormuras.junit.platform.isolator.GroupArtifact.JUNIT_PLATFORM_REPORTING;
 import static de.sormuras.junit.platform.isolator.GroupArtifact.JUNIT_VINTAGE_ENGINE;
 import static de.sormuras.junit.platform.isolator.Version.ISOLATOR_VERSION;
 import static de.sormuras.junit.platform.isolator.Version.JUNIT_JUPITER_VERSION;
@@ -89,6 +91,8 @@ class GroupArtifactVersionTests {
     assertSame(JUNIT_PLATFORM_VERSION, JUNIT_PLATFORM_COMMONS.getVersion());
     assertSame(JUNIT_PLATFORM_VERSION, JUNIT_PLATFORM_CONSOLE.getVersion());
     assertSame(JUNIT_PLATFORM_VERSION, JUNIT_PLATFORM_LAUNCHER.getVersion());
+    assertSame(JUNIT_PLATFORM_VERSION, JUNIT_PLATFORM_REPORTING.getVersion());
+    assertSame(JUNIT_JUPITER_VERSION, JUNIT_JUPITER.getVersion());
     assertSame(JUNIT_JUPITER_VERSION, JUNIT_JUPITER_API.getVersion());
     assertSame(JUNIT_JUPITER_VERSION, JUNIT_JUPITER_ENGINE.getVersion());
     assertSame(JUNIT_VINTAGE_VERSION, JUNIT_VINTAGE_ENGINE.getVersion());

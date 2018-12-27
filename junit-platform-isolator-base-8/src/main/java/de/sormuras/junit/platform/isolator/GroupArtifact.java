@@ -8,6 +8,8 @@ public enum GroupArtifact {
 
   ISOLATOR_WORKER("de.sormuras.junit", "junit-platform-isolator-worker", "ISOLATOR"),
 
+  JUNIT_JUPITER("org.junit.jupiter", "junit-jupiter", "JUNIT_JUPITER"),
+
   JUNIT_JUPITER_API("org.junit.jupiter", "junit-jupiter-api", "JUNIT_JUPITER"),
 
   JUNIT_JUPITER_ENGINE("org.junit.jupiter", "junit-jupiter-engine", "JUNIT_JUPITER"),
@@ -17,6 +19,8 @@ public enum GroupArtifact {
   JUNIT_PLATFORM_CONSOLE("org.junit.platform", "junit-platform-console", "JUNIT_PLATFORM"),
 
   JUNIT_PLATFORM_LAUNCHER("org.junit.platform", "junit-platform-launcher", "JUNIT_PLATFORM"),
+
+  JUNIT_PLATFORM_REPORTING("org.junit.platform", "junit-platform-reporting", "JUNIT_PLATFORM"),
 
   JUNIT_VINTAGE_ENGINE("org.junit.vintage", "junit-vintage-engine", "JUNIT_VINTAGE");
 

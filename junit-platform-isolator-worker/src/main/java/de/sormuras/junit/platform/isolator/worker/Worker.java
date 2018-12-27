@@ -6,6 +6,7 @@ import de.sormuras.junit.platform.isolator.Configuration;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -22,6 +23,7 @@ import org.junit.platform.launcher.TestPlan;
 import org.junit.platform.launcher.core.LauncherDiscoveryRequestBuilder;
 import org.junit.platform.launcher.listeners.SummaryGeneratingListener;
 import org.junit.platform.launcher.listeners.TestExecutionSummary;
+import org.junit.platform.reporting.legacy.xml.LegacyXmlReportGeneratingListener;
 
 public class Worker implements Callable<Integer> {
 
@@ -74,15 +76,15 @@ public class Worker implements Callable<Integer> {
     SummaryGeneratingListener summaryGeneratingListener = new SummaryGeneratingListener();
     launcher.registerTestExecutionListeners(summaryGeneratingListener);
 
-    // TODO https://github.com/junit-team/junit5/issues/1375
-    //    String reports = configuration.getReports();
-    //    if (!reports.trim().isEmpty()) {
-    //      Path path = Paths.get(reports);
-    //      if (!path.isAbsolute()) {
-    //        path = Paths.get(build.getDirectory()).resolve(path);
-    //      }
-    //      launcher.register...(new XmlReportsWritingListener(path, log::error));
-    //    }
+    try {
+      Class.forName("org.junit.platform.reporting.legacy.xml.LegacyXmlReportGeneratingListener");
+      LegacyXmlReportGeneratingListener legacyXmlReportGeneratingListener =
+          new LegacyXmlReportGeneratingListener(
+              targetDirectory, new PrintWriter(new LogWriter(this::warn)));
+      launcher.registerTestExecutionListeners(legacyXmlReportGeneratingListener);
+    } catch (ClassNotFoundException e) {
+      warn("LegacyXmlReportGeneratingListener not found - JUnit Platform 1.4+ is required", e);
+    }
 
     debug("Executing launcher...");
     launcher.execute(request);
@@ -157,5 +159,26 @@ public class Worker implements Callable<Integer> {
     summary.printTo(writer);
     summary.printFailuresTo(writer);
     return Arrays.asList(string.toString().split("\\R"));
+  }
+
+  private static class LogWriter extends Writer {
+
+    private final BiConsumer<String, Object[]> consumer;
+    private final Object[] empty = {};
+
+    private LogWriter(BiConsumer<String, Object[]> consumer) {
+      this.consumer = consumer;
+    }
+
+    @Override
+    public void write(char[] cbuf, int off, int len) {
+      consumer.accept(new String(cbuf, off, len), empty);
+    }
+
+    @Override
+    public void flush() {}
+
+    @Override
+    public void close() {}
   }
 }

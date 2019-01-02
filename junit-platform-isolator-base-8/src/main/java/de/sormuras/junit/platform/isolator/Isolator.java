@@ -17,7 +17,7 @@ public class Isolator {
 
   private static final Overlay overlay = OverlaySingleton.INSTANCE;
 
-  private static final String LOG_MESSAGE_PREFIX = "[WORKER] ";
+  private static final String WORKER_LOG_MESSAGE_PREFIX = "[WORKER] ";
 
   private final Driver driver;
 
@@ -98,19 +98,19 @@ public class Isolator {
   private void workerLogFunction(String level, String message) {
     switch (level) {
       case "debug":
-        driver.debug(LOG_MESSAGE_PREFIX + message);
+        driver.debug(WORKER_LOG_MESSAGE_PREFIX + message);
         return;
       case "info":
-        driver.info(LOG_MESSAGE_PREFIX + message);
+        driver.info(WORKER_LOG_MESSAGE_PREFIX + message);
         return;
       case "warn":
-        driver.warn(LOG_MESSAGE_PREFIX + message);
+        driver.warn(WORKER_LOG_MESSAGE_PREFIX + message);
         return;
       case "error":
-        driver.error(LOG_MESSAGE_PREFIX + message);
+        driver.error(WORKER_LOG_MESSAGE_PREFIX + message);
         return;
       default:
-        driver.warn(LOG_MESSAGE_PREFIX + "[{0}] {1}", level, message);
+        driver.warn(WORKER_LOG_MESSAGE_PREFIX + "[{0}] {1}", level, message);
     }
   }
 }

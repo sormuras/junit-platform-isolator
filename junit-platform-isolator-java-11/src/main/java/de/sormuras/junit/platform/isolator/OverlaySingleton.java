@@ -7,8 +7,8 @@ import java.lang.module.ModuleFinder;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Path;
+import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 
 public enum OverlaySingleton implements Overlay {
   INSTANCE {
@@ -18,18 +18,28 @@ public enum OverlaySingleton implements Overlay {
     }
 
     @Override
-    public ClassLoader newModuleLoader(Set<String> modules, ClassLoader parent, Path... entries) {
-      var finder = ModuleFinder.of(entries);
-      var configuration = boot().configuration().resolve(finder, ModuleFinder.of(), modules);
+    public ClassLoader newModuleLoader(
+        Driver driver, Configuration configuration, ClassLoader parentLoader) {
+      var selectedModules = configuration.discovery().getSelectedModules();
+      if (selectedModules.isEmpty()) {
+        throw new IllegalStateException("No module selected!");
+      }
+
+      // TODO For now, merge all entries into a single layer...
+      //      https://github.com/sormuras/junit-platform-isolator/issues/9
+      var entries = new LinkedHashSet<Path>();
+      driver.paths().values().forEach(entries::addAll);
+
+      var finder = ModuleFinder.of(entries.toArray(new Path[0]));
+      var moduleConfig = boot().configuration().resolve(finder, ModuleFinder.of(), selectedModules);
       var parentLayers = List.of(boot());
-      var parentLoader = ClassLoader.getSystemClassLoader(); // TODO ... parent?!
-      var controller = defineModulesWithOneLoader(configuration, parentLayers, parentLoader);
+      var controller = defineModulesWithOneLoader(moduleConfig, parentLayers, parentLoader);
       // TODO Read `module-info.test` to configure module layer at runtime
       //   https://github.com/sormuras/junit-platform-isolator/issues/10
       //   controller.addExports();
       //   controller.addOpens();
       //   controller.addReads();
-      var name = "de.sormuras.junit.platform.isolator.worker"; // TODO Or one of modules?
+      var name = selectedModules.toArray()[0].toString();
       return controller.layer().findLoader(name);
     }
 

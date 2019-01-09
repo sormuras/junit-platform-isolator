@@ -6,7 +6,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -47,8 +46,8 @@ public class Isolator {
       loader = overlay.platformClassLoader();
     }
 
-    Set<String> modules = configuration.discovery().getSelectedModules();
-    if (modules.isEmpty()) {
+    Set<String> selectedModules = configuration.discovery().getSelectedModules();
+    if (selectedModules.isEmpty()) {
       driver.debug("Building non-modular classloader stack: {0} layers", driver.paths().size());
       for (Map.Entry<String, Set<Path>> entry : driver.paths().entrySet()) {
         String name = entry.getKey();
@@ -58,13 +57,8 @@ public class Isolator {
         driver.debug("Created loader named {0} (parent={1}): {2}", name, loader, paths);
       }
     } else {
-      driver.debug("Test module(s) present: " + modules);
-      // TODO For now, merge all into a single layer...
-      //      https://github.com/sormuras/junit-platform-isolator/issues/9
-      Set<Path> all = new LinkedHashSet<>();
-      driver.paths().values().forEach(all::addAll);
-      Path[] entries = all.toArray(new Path[0]);
-      loader = overlay.newModuleLoader(modules, loader, entries);
+      driver.debug("Selected test module(s) present: " + selectedModules);
+      loader = overlay.newModuleLoader(driver, configuration, loader);
     }
 
     // Instantiate Worker passing configuration and other arguments...

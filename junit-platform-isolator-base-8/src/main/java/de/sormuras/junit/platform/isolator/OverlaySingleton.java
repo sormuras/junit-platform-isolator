@@ -2,8 +2,6 @@ package de.sormuras.junit.platform.isolator;
 
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.nio.file.Path;
-import java.util.Set;
 
 public enum OverlaySingleton implements Overlay {
   INSTANCE {
@@ -13,7 +11,7 @@ public enum OverlaySingleton implements Overlay {
     }
 
     @Override
-    public ClassLoader newModuleLoader(Set<String> _m, ClassLoader _p, Path... _e) {
+    public ClassLoader newModuleLoader(Driver _d, Configuration _c, ClassLoader _p) {
       throw new UnsupportedOperationException("Module system is not available!");
     }
 

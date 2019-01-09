@@ -21,6 +21,9 @@ public interface Driver {
   /** Named paths sets. */
   Map<String, Set<Path>> paths();
 
+  /** Modules helper. */
+  Modules modules();
+
   /** If worker class could not be loaded in isolation: fail. */
   default boolean isIllegalStateIfWorkerIsNotLoadedInIsolation() {
     return true;

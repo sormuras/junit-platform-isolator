@@ -1,5 +1,7 @@
 import de.sormuras.junit.platform.isolator.Driver;
+import de.sormuras.junit.platform.isolator.Modules;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
@@ -20,6 +22,11 @@ class NoopDriver implements Driver {
   @Override
   public Map<String, Set<Path>> paths() {
     return Collections.emptyMap();
+  }
+
+  @Override
+  public Modules modules() {
+    return new Modules(Paths.get("."), Paths.get("."));
   }
 
   @Override

@@ -51,7 +51,8 @@ public class Modules {
 
   @Override
   public String toString() {
-    return String.format("Modules [main=%s, test=%s]", toStringMainModule(), toStringTestModule());
+    return String.format(
+        "Modules(8) [main=%s, test=%s]", toStringMainModule(), toStringTestModule());
   }
 
   public String toStringMainModule() {

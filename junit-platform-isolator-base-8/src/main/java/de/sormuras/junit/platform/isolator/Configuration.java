@@ -15,6 +15,9 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.io.UncheckedIOException;
 import java.net.URI;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Objects;
@@ -38,6 +41,10 @@ public class Configuration implements Serializable {
     String targetDirectory = "target/junit-platform";
     String workerCoordinates = GroupArtifact.ISOLATOR_WORKER.toStringWithDefaultVersion();
     String workerClassName = "de.sormuras.junit.platform.isolator.worker.Worker";
+    boolean workerIsolationRequired = true;
+    Map<String, Set<String>> paths = emptyMap();
+    String targetMainPath = "target/classes";
+    String targetTestPath = "target/test-classes";
 
     public boolean isDryRun() {
       return dryRun;
@@ -67,32 +74,69 @@ public class Configuration implements Serializable {
       return workerClassName;
     }
 
+    public boolean isWorkerIsolationRequired() {
+      return workerIsolationRequired;
+    }
+
+    public Map<String, Set<String>> getPaths() {
+      return paths;
+    }
+
+    public String getTargetMainPath() {
+      return targetMainPath;
+    }
+
+    public String getTargetTestPath() {
+      return targetTestPath;
+    }
+
+    public Map<String, Set<Path>> toPaths() {
+      Map<String, Set<String>> names = getPaths();
+      Map<String, Set<Path>> map = new LinkedHashMap<>();
+      for (String name : map.keySet()) {
+        Set<Path> paths = new LinkedHashSet<>();
+        for (String entry : names.get(name)) {
+          paths.add(Paths.get(entry));
+        }
+        map.put(name, paths);
+      }
+      return map;
+    }
+
     private Basic() {}
 
     @Override
     public boolean equals(Object o) {
       if (this == o) return true;
-      if (!(o instanceof Basic)) return false;
+      if (o == null || getClass() != o.getClass()) return false;
       Basic basic = (Basic) o;
       return dryRun == basic.dryRun
           && failIfNoTests == basic.failIfNoTests
           && platformClassLoader == basic.platformClassLoader
           && defaultAssertionStatus == basic.defaultAssertionStatus
+          && workerIsolationRequired == basic.workerIsolationRequired
           && targetDirectory.equals(basic.targetDirectory)
           && workerCoordinates.equals(basic.workerCoordinates)
-          && workerClassName.equals(basic.workerClassName);
+          && workerClassName.equals(basic.workerClassName)
+          && paths.equals(basic.paths)
+          && targetMainPath.equals(basic.targetMainPath)
+          && targetTestPath.equals(basic.targetTestPath);
     }
 
     @Override
     public int hashCode() {
       return Objects.hash(
-          workerCoordinates,
-          workerClassName,
-          targetDirectory,
           dryRun,
           failIfNoTests,
           platformClassLoader,
-          defaultAssertionStatus);
+          defaultAssertionStatus,
+          targetDirectory,
+          workerCoordinates,
+          workerClassName,
+          workerIsolationRequired,
+          paths,
+          targetMainPath,
+          targetTestPath);
     }
 
     @Override
@@ -105,6 +149,10 @@ public class Configuration implements Serializable {
           .add("targetDirectory='" + targetDirectory + "'")
           .add("workerCoordinates='" + workerCoordinates + "'")
           .add("workerClassName='" + workerClassName + "'")
+          .add("workerIsolationRequired=" + workerIsolationRequired)
+          .add("paths=" + paths)
+          .add("targetMainPath='" + targetMainPath + "'")
+          .add("targetTestPath='" + targetTestPath + "'")
           .toString();
     }
   }

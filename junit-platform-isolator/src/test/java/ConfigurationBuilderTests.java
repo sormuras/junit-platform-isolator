@@ -35,6 +35,10 @@ class ConfigurationBuilderTests {
         .end()
         .setWorkerCoordinates("local:worker:version")
         .setWorkerClassName("NoopWorker")
+        .setWorkerIsolationRequired(false)
+        .setPaths(Map.of("test", Set.of("abc")))
+        .setTargetMainPath("main")
+        .setTargetTestPath("test")
         .launcher()
         .setTestEngineAutoRegistration(false)
         .setTestExecutionListenerAutoRegistration(false)
@@ -52,7 +56,11 @@ class ConfigurationBuilderTests {
             + "defaultAssertionStatus=false, "
             + "targetDirectory='bin/junit', "
             + "workerCoordinates='local:worker:version', "
-            + "workerClassName='NoopWorker'"
+            + "workerClassName='NoopWorker', "
+            + "workerIsolationRequired=false, "
+            + "paths={test=[abc]}, "
+            + "targetMainPath='main', "
+            + "targetTestPath='test'"
             + "], "
             + "discovery=Discovery["
             + "selectedUris=[https://junit.org], "

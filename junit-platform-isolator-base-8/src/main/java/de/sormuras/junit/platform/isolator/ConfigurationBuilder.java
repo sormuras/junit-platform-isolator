@@ -69,9 +69,33 @@ public class ConfigurationBuilder {
     return this;
   }
 
-  /** Maven coordinates of the artifact providing the worker implementation. */
+  /** Class name of the worker to instantiate. */
   public ConfigurationBuilder setWorkerClassName(String workerClassName) {
     configuration.basic().workerClassName = workerClassName;
+    return this;
+  }
+
+  /** Worker requires isolation by default -- set to {@code false} to relax. */
+  public ConfigurationBuilder setWorkerIsolationRequired(boolean workerIsolationRequired) {
+    configuration.basic().workerIsolationRequired = workerIsolationRequired;
+    return this;
+  }
+
+  /** Set map of paths. */
+  public ConfigurationBuilder setPaths(Map<String, Set<String>> paths) {
+    configuration.basic().paths = paths;
+    return this;
+  }
+
+  /** Set main target output directory. */
+  public ConfigurationBuilder setTargetMainPath(String targetMainPath) {
+    configuration.basic().targetMainPath = targetMainPath;
+    return this;
+  }
+
+  /** Set test target output directory. */
+  public ConfigurationBuilder setTargetTestPath(String targetTestPath) {
+    configuration.basic().targetTestPath = targetTestPath;
     return this;
   }
 

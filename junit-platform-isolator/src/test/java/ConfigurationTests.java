@@ -34,6 +34,13 @@ class ConfigurationTests {
           () -> assertEquals("target/junit-platform", basic.getTargetDirectory())),
       dynamicTest("workerClassName", () -> assertFalse(basic.getWorkerClassName().isEmpty())),
       dynamicTest("workerCoordinates", () -> assertFalse(basic.getWorkerCoordinates().isEmpty())),
+      dynamicTest("workerIsolationRequired", () -> assertTrue(basic.isWorkerIsolationRequired())),
+      dynamicTest("paths(String)", () -> assertEmpty(basic.getPaths().keySet())),
+      dynamicTest("paths(Path)", () -> assertEmpty(basic.toPaths().keySet())),
+      dynamicTest(
+          "targetMainPath", () -> assertEquals("target/classes", basic.getTargetMainPath())),
+      dynamicTest(
+          "targetTestPath", () -> assertEquals("target/test-classes", basic.getTargetTestPath())),
       // discovery
       dynamicTest("parameters", () -> assertEmpty(discovery.getParameters().keySet())),
       // discovery - selectors

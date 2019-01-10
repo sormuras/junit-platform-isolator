@@ -48,8 +48,9 @@ public class Isolator {
 
     Set<String> selectedModules = configuration.discovery().getSelectedModules();
     if (selectedModules.isEmpty()) {
-      driver.debug("Building non-modular classloader stack: {0} layers", driver.paths().size());
-      for (Map.Entry<String, Set<Path>> entry : driver.paths().entrySet()) {
+      Map<String, Set<Path>> map = basic.toPaths();
+      driver.debug("Building non-modular classloader stack: {0} layers", map.size());
+      for (Map.Entry<String, Set<Path>> entry : map.entrySet()) {
         String name = entry.getKey();
         Set<Path> paths = entry.getValue();
         loader = overlay.newClassLoader(name, loader, paths);
@@ -66,7 +67,7 @@ public class Isolator {
     ClassLoader workerLoader = workerClass.getClassLoader();
     if (workerLoader != loader) {
       driver.warn("{0} was not loaded in isolation: {1}", workerClass, workerLoader);
-      if (driver.isIllegalStateIfWorkerIsNotLoadedInIsolation()) {
+      if (basic.isWorkerIsolationRequired()) {
         throw new IllegalStateException("Isolating worker failed!");
       }
     }

@@ -7,7 +7,7 @@ import java.lang.module.ModuleFinder;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Path;
-import java.util.LinkedHashSet;
+import java.util.Collection;
 import java.util.List;
 
 public enum OverlaySingleton implements Overlay {
@@ -27,10 +27,17 @@ public enum OverlaySingleton implements Overlay {
 
       // TODO For now, merge all entries into a single layer...
       //      https://github.com/sormuras/junit-platform-isolator/issues/9
-      var entries = new LinkedHashSet<Path>();
-      driver.paths().values().forEach(entries::addAll);
+      Path[] entries =
+          configuration
+              .basic()
+              .toPaths()
+              .values()
+              .stream()
+              .flatMap(Collection::stream)
+              .distinct()
+              .toArray(Path[]::new);
 
-      var finder = ModuleFinder.of(entries.toArray(new Path[0]));
+      var finder = ModuleFinder.of(entries);
       var moduleConfig = boot().configuration().resolve(finder, ModuleFinder.of(), selectedModules);
       var parentLayers = List.of(boot());
       var controller = defineModulesWithOneLoader(moduleConfig, parentLayers, parentLoader);

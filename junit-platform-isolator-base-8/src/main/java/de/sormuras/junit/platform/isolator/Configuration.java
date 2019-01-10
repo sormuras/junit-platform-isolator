@@ -93,7 +93,7 @@ public class Configuration implements Serializable {
     public Map<String, Set<Path>> toPaths() {
       Map<String, Set<String>> names = getPaths();
       Map<String, Set<Path>> map = new LinkedHashMap<>();
-      for (String name : map.keySet()) {
+      for (String name : names.keySet()) {
         Set<Path> paths = new LinkedHashSet<>();
         for (String entry : names.get(name)) {
           paths.add(Paths.get(entry));

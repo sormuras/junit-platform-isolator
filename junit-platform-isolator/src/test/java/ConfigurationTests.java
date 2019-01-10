@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 import de.sormuras.junit.platform.isolator.Configuration;
 import de.sormuras.junit.platform.isolator.ConfigurationBuilder;
 import java.net.URI;
+import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
@@ -131,6 +132,18 @@ class ConfigurationTests {
             .build();
 
     assertEquals(add, set);
+  }
+
+  @Test
+  void toPaths() {
+    Configuration configuration =
+        new ConfigurationBuilder()
+            .setPaths(Map.of("alpha", Set.of("a/b"), "omega", Set.of("c", "d")))
+            .build();
+
+    assertEquals(
+        Map.of("alpha", Set.of(Path.of("a/b")), "omega", Set.of(Path.of("c"), Path.of("d"))),
+        configuration.basic().toPaths());
   }
 
   private static void assertEmpty(Collection<?> collection) {

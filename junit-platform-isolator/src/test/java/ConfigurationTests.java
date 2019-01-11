@@ -42,6 +42,9 @@ class ConfigurationTests {
           "targetMainPath", () -> assertEquals("target/classes", basic.getTargetMainPath())),
       dynamicTest(
           "targetTestPath", () -> assertEquals("target/test-classes", basic.getTargetTestPath())),
+      dynamicTest(
+          "moduleInfoTestPath",
+          () -> assertEquals("src/test/java/module-info.test", basic.getModuleInfoTestPath())),
       // discovery
       dynamicTest("parameters", () -> assertEmpty(discovery.getParameters().keySet())),
       // discovery - selectors

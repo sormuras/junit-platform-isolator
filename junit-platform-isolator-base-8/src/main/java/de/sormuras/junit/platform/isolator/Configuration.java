@@ -45,6 +45,7 @@ public class Configuration implements Serializable {
     Map<String, Set<String>> paths = emptyMap();
     String targetMainPath = "target/classes";
     String targetTestPath = "target/test-classes";
+    String moduleInfoTestPath = "src/test/java/module-info.test";
 
     public boolean isDryRun() {
       return dryRun;
@@ -90,6 +91,10 @@ public class Configuration implements Serializable {
       return targetTestPath;
     }
 
+    public String getModuleInfoTestPath() {
+      return moduleInfoTestPath;
+    }
+
     public Map<String, Set<Path>> toPaths() {
       Map<String, Set<String>> names = getPaths();
       Map<String, Set<Path>> map = new LinkedHashMap<>();
@@ -120,7 +125,8 @@ public class Configuration implements Serializable {
           && workerClassName.equals(basic.workerClassName)
           && paths.equals(basic.paths)
           && targetMainPath.equals(basic.targetMainPath)
-          && targetTestPath.equals(basic.targetTestPath);
+          && targetTestPath.equals(basic.targetTestPath)
+          && moduleInfoTestPath.equals(basic.moduleInfoTestPath);
     }
 
     @Override
@@ -136,7 +142,8 @@ public class Configuration implements Serializable {
           workerIsolationRequired,
           paths,
           targetMainPath,
-          targetTestPath);
+          targetTestPath,
+          moduleInfoTestPath);
     }
 
     @Override
@@ -153,6 +160,7 @@ public class Configuration implements Serializable {
           .add("paths=" + paths)
           .add("targetMainPath='" + targetMainPath + "'")
           .add("targetTestPath='" + targetTestPath + "'")
+          .add("moduleInfoTestPath='" + moduleInfoTestPath + "'")
           .toString();
     }
   }

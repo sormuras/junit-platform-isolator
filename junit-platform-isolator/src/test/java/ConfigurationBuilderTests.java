@@ -39,6 +39,7 @@ class ConfigurationBuilderTests {
         .setPaths(Map.of("test", Set.of("abc")))
         .setTargetMainPath("main")
         .setTargetTestPath("test")
+        .setModuleInfoTestPath("info.test")
         .launcher()
         .setTestEngineAutoRegistration(false)
         .setTestExecutionListenerAutoRegistration(false)
@@ -60,7 +61,8 @@ class ConfigurationBuilderTests {
             + "workerIsolationRequired=false, "
             + "paths={test=[abc]}, "
             + "targetMainPath='main', "
-            + "targetTestPath='test'"
+            + "targetTestPath='test', "
+            + "moduleInfoTestPath='info.test'"
             + "], "
             + "discovery=Discovery["
             + "selectedUris=[https://junit.org], "

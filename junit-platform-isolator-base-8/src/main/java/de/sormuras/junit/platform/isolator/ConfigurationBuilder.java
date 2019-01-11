@@ -99,6 +99,12 @@ public class ConfigurationBuilder {
     return this;
   }
 
+  /** Set path to {@code module-info.test} file. */
+  public ConfigurationBuilder setModuleInfoTestPath(String moduleInfoTestPath) {
+    configuration.basic().moduleInfoTestPath = moduleInfoTestPath;
+    return this;
+  }
+
   /** Nested Launcher Discovery Request Builder. */
   public class DiscoveryBuilder {
 

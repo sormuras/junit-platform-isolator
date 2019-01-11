@@ -6,6 +6,7 @@ import static java.lang.ModuleLayer.defineModulesWithOneLoader;
 import java.lang.module.ModuleFinder;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.List;
@@ -41,11 +42,10 @@ public enum OverlaySingleton implements Overlay {
       var moduleConfig = boot().configuration().resolve(finder, ModuleFinder.of(), selectedModules);
       var parentLayers = List.of(boot());
       var controller = defineModulesWithOneLoader(moduleConfig, parentLayers, parentLoader);
-      // TODO Read `module-info.test` to configure module layer at runtime
-      //   https://github.com/sormuras/junit-platform-isolator/issues/10
-      //   controller.addExports();
-      //   controller.addOpens();
-      //   controller.addReads();
+      var moduleInfoTest = Path.of(configuration.basic().getModuleInfoTestPath());
+      if (Files.isReadable(moduleInfoTest)) {
+        driver.parseModuleInfoTestLines(moduleInfoTest, new ModuleLayerUpdater(controller));
+      }
       var name = selectedModules.toArray()[0].toString();
       return controller.layer().findLoader(name);
     }

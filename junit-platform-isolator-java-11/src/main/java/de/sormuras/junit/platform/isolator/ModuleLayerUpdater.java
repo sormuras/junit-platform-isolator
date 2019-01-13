@@ -1,6 +1,8 @@
 package de.sormuras.junit.platform.isolator;
 
+import java.util.Arrays;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 /**
  *
@@ -18,10 +20,12 @@ import java.util.function.Consumer;
  */
 class ModuleLayerUpdater implements Consumer<String> {
 
+  private final Driver driver;
   private final ModuleLayer.Controller controller;
   private String operation = null;
 
-  ModuleLayerUpdater(ModuleLayer.Controller controller) {
+  ModuleLayerUpdater(Driver driver, ModuleLayer.Controller controller) {
+    this.driver = driver;
     this.controller = controller;
   }
 
@@ -30,19 +34,27 @@ class ModuleLayerUpdater implements Consumer<String> {
     // line no. 0, 2, 4,... starts with "--add-[exports|opens|reads]"
     if (operation == null) {
       operation = line;
+      driver.debug("Stored `{0}` for next round.", line);
       return;
     }
 
     // line no. 1, 3, 5,... are arguments "source[/package]=target(,target)*
     var option = operation;
     operation = null;
+    driver.debug("Handling `{0}` operator: `{1}`", option, line);
+
     var split = line.split("=");
     var sourceName = extractModuleName(split[0]);
     var packageName = extractPackageName(split[0]);
-    var source = controller.layer().findModule(sourceName).orElseThrow();
     var targetNames = split[1].split(",");
+    driver.debug(" o sourceName = `{0}`", sourceName);
+    driver.debug(" o packageName = `{0}`", packageName);
+    driver.debug(" o targetNames = {0}", Arrays.asList(targetNames));
+
+    var layer = controller.layer();
+    var source = layer.findModule(sourceName).orElseThrow(moduleNotFound(sourceName));
     for (var targetName : targetNames) {
-      var target = controller.layer().findModule(targetName).orElseThrow();
+      var target = layer.findModule(targetName).orElseThrow(moduleNotFound(targetName));
       switch (option) {
         case "--add-exports":
           controller.addExports(source, packageName, target);
@@ -57,6 +69,10 @@ class ModuleLayerUpdater implements Consumer<String> {
           throw new UnsupportedOperationException("Unknown option: " + option);
       }
     }
+  }
+
+  private static Supplier<AssertionError> moduleNotFound(String name) {
+    return () -> new AssertionError("Module with name `" + name + "` not found!");
   }
 
   static String extractModuleName(String moduleNameWithOptionalPackageName) {

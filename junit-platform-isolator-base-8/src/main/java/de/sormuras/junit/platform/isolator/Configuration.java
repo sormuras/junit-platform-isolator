@@ -112,6 +112,10 @@ public class Configuration implements Serializable {
       return map;
     }
 
+    public Modules toModules() {
+      return new Modules(Paths.get(targetMainPath), Paths.get(targetTestPath));
+    }
+
     public Optional<Path> findModuleInfoTest() {
       Path path = Paths.get(moduleInfoTestPath);
       if (Files.exists(path)) {

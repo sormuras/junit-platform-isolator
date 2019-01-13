@@ -6,9 +6,9 @@ import static java.lang.ModuleLayer.defineModulesWithOneLoader;
 import java.lang.module.ModuleFinder;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 public enum OverlaySingleton implements Overlay {
@@ -26,25 +26,28 @@ public enum OverlaySingleton implements Overlay {
         throw new IllegalStateException("No module selected!");
       }
 
+      var basic = configuration.basic();
+      var patch = basic.toModules().getMode() == TestMode.MODULAR_PATCHED_TEST_RUNTIME;
+
       // TODO For now, merge all entries into a single layer...
       //      https://github.com/sormuras/junit-platform-isolator/issues/9
       Path[] entries =
-          configuration
-              .basic()
-              .toPaths()
-              .values()
-              .stream()
+          configuration.basic().toPaths().values().stream()
               .flatMap(Collection::stream)
               .distinct()
               .toArray(Path[]::new);
 
       var finder = ModuleFinder.of(entries);
-      var moduleConfig = boot().configuration().resolve(finder, ModuleFinder.of(), selectedModules);
+      var roots = new LinkedHashSet<>(selectedModules);
+      if (patch) {
+        // Same as `--add-modules`
+        roots.add("org.junit.jupiter.api"); // TODO All targets as root entry...
+      }
+      var moduleConfig = boot().configuration().resolve(finder, ModuleFinder.of(), roots);
       var parentLayers = List.of(boot());
       var controller = defineModulesWithOneLoader(moduleConfig, parentLayers, parentLoader);
-      var moduleInfoTest = Path.of(configuration.basic().getModuleInfoTestPath());
-      if (Files.isReadable(moduleInfoTest)) {
-        driver.parseModuleInfoTestLines(moduleInfoTest, new ModuleLayerUpdater(controller));
+      if (patch) {
+        basic.parseModuleInfoTestLines(new ModuleLayerUpdater(driver, controller));
       }
       var name = selectedModules.toArray()[0].toString();
       return controller.layer().findLoader(name);

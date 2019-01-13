@@ -15,14 +15,18 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.io.UncheckedIOException;
 import java.net.URI;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.StringJoiner;
+import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 /** Isolator configuration. */
 public class Configuration implements Serializable {
@@ -106,6 +110,32 @@ public class Configuration implements Serializable {
         map.put(name, paths);
       }
       return map;
+    }
+
+    public Optional<Path> findModuleInfoTest() {
+      Path path = Paths.get(moduleInfoTestPath);
+      if (Files.exists(path)) {
+        return Optional.of(path);
+      }
+      return Optional.empty();
+    }
+
+    /** Iterate all relevant lines and let the passed consumer handle each. */
+    public void parseModuleInfoTestLines(Consumer<String> consumeLine) {
+      Optional<Path> moduleInfoTest = findModuleInfoTest();
+      if (!moduleInfoTest.isPresent()) {
+        return;
+      }
+      Path path = moduleInfoTest.get();
+      try (Stream<String> lines = Files.lines(path)) {
+        lines
+            .map(String::trim)
+            .filter(line -> !line.isEmpty())
+            .filter(line -> !line.startsWith("//"))
+            .forEach(consumeLine);
+      } catch (IOException e) {
+        throw new UncheckedIOException("Reading " + path + " failed", e);
+      }
     }
 
     private Basic() {}

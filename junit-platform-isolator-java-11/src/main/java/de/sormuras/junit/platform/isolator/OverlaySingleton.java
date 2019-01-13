@@ -32,7 +32,10 @@ public enum OverlaySingleton implements Overlay {
       // TODO For now, merge all entries into a single layer...
       //      https://github.com/sormuras/junit-platform-isolator/issues/9
       Path[] entries =
-          configuration.basic().toPaths().values().stream()
+          basic
+              .toPaths()
+              .values()
+              .stream()
               .flatMap(Collection::stream)
               .distinct()
               .toArray(Path[]::new);
@@ -40,8 +43,10 @@ public enum OverlaySingleton implements Overlay {
       var finder = ModuleFinder.of(entries);
       var roots = new LinkedHashSet<>(selectedModules);
       if (patch) {
-        // Same as `--add-modules`
-        roots.add("org.junit.jupiter.api"); // TODO All targets as root entry...
+        // Same as `--add-modules targetName(,targetName)*`
+        var collector = new TargetModuleCollector(driver);
+        basic.parseModuleInfoTestLines(collector);
+        roots.addAll(collector.getTargets());
       }
       var moduleConfig = boot().configuration().resolve(finder, ModuleFinder.of(), roots);
       var parentLayers = List.of(boot());

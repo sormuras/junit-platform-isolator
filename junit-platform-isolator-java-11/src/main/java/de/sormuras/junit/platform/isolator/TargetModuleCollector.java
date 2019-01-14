@@ -19,7 +19,7 @@ class TargetModuleCollector extends AbstractModuleInfoTestConsumer {
     addAll(targets, targetNames);
   }
 
-  public List<String> getTargets() {
+  List<String> getTargets() {
     return targets;
   }
 }

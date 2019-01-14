@@ -1,5 +1,6 @@
 package de.sormuras.junit.platform.isolator;
 
+import java.util.Arrays;
 import java.util.function.Supplier;
 
 class ModuleLayerUpdater extends AbstractModuleInfoTestConsumer {
@@ -13,6 +14,10 @@ class ModuleLayerUpdater extends AbstractModuleInfoTestConsumer {
 
   @Override
   public void accept(String option, String sourceName, String packageName, String[] targetNames) {
+    driver.debug(
+        "Updating module layer: {0} `{1}[/{2}]`=`{3}`",
+        sourceName, packageName, Arrays.asList(targetNames));
+
     var layer = controller.layer();
     var source = layer.findModule(sourceName).orElseThrow(moduleNotFound(sourceName));
     for (var targetName : targetNames) {

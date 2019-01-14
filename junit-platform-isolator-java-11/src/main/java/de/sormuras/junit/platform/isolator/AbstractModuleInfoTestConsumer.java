@@ -1,6 +1,5 @@
 package de.sormuras.junit.platform.isolator;
 
-import java.util.Arrays;
 import java.util.function.Consumer;
 
 /**
@@ -19,7 +18,7 @@ import java.util.function.Consumer;
  */
 abstract class AbstractModuleInfoTestConsumer implements Consumer<String> {
 
-  private final Driver driver;
+  final Driver driver;
   private String operation = null;
 
   AbstractModuleInfoTestConsumer(Driver driver) {
@@ -44,9 +43,6 @@ abstract class AbstractModuleInfoTestConsumer implements Consumer<String> {
     var sourceName = extractModuleName(split[0]);
     var packageName = extractPackageName(split[0]);
     var targetNames = split[1].split(",");
-    driver.debug(" o sourceName = `{0}`", sourceName);
-    driver.debug(" o packageName = `{0}`", packageName);
-    driver.debug(" o targetNames = {0}", Arrays.asList(targetNames));
 
     accept(option, sourceName, packageName, targetNames);
   }

@@ -41,6 +41,9 @@ class IsolatorTests {
   }
 
   private static ConfigurationBuilder configureNoop() {
-    return new ConfigurationBuilder().setDryRun(true).setWorkerClassName("NoopWorker");
+    return new ConfigurationBuilder()
+        .setDryRun(true)
+        .setWorkerIsolationRequired(false)
+        .setWorkerClassName("NoopWorker");
   }
 }

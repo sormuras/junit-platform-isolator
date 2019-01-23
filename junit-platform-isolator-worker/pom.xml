@@ -64,7 +64,7 @@
                 <artifactId>junit-platform-maven-plugin</artifactId>
                 <extensions>true</extensions>
                 <configuration>
-                    <isolation>NONE</isolation> <!-- prevent cyclic exceptions -->
+                    <isolation>NONE</isolation> <!-- Isolating worker fails otherwise. -->
                 </configuration>
             </plugin>
         </plugins>

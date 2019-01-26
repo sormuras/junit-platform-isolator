@@ -115,7 +115,7 @@ public class Worker implements Callable<Integer> {
       return 0;
     }
 
-    summaryLines.forEach(this::warn);
+    summaryLines.forEach(line -> warn("{0}", line));
     return 1;
   }
 

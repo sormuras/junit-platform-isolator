@@ -114,9 +114,7 @@ public class Modules {
     builder
         .append(" requires=")
         .append(
-            module
-                .requires()
-                .stream()
+            module.requires().stream()
                 .map(ModuleDescriptor.Requires::name)
                 .collect(joining(", ", "[", "]")));
     builder.append(" packages=").append(module.packages());

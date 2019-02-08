@@ -32,10 +32,7 @@ public enum OverlaySingleton implements Overlay {
       // TODO For now, merge all entries into a single layer...
       //      https://github.com/sormuras/junit-platform-isolator/issues/9
       Path[] entries =
-          basic
-              .toPaths()
-              .values()
-              .stream()
+          basic.toPaths().values().stream()
               .flatMap(Collection::stream)
               .distinct()
               .toArray(Path[]::new);

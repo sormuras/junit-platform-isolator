@@ -118,7 +118,7 @@ public class Configuration implements Serializable {
 
     public Optional<Path> findModuleInfoTest() {
       Path path = Paths.get(moduleInfoTestPath);
-      if (Files.exists(path)) {
+      if (Files.isRegularFile(path)) {
         return Optional.of(path);
       }
       return Optional.empty();

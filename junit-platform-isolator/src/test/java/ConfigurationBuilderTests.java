@@ -2,6 +2,7 @@ import static org.junit.jupiter.api.Assertions.assertLinesMatch;
 
 import de.sormuras.junit.platform.isolator.ConfigurationBuilder;
 import java.net.URI;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -43,6 +44,8 @@ class ConfigurationBuilderTests {
         .launcher()
         .setTestEngineAutoRegistration(false)
         .setTestExecutionListenerAutoRegistration(false)
+        .setAdditionalTestEngines(
+            Collections.singletonList("de.sormuras.junit.platform.CustomTestEngine"))
         .end()
         .setDryRun(false);
 
@@ -80,7 +83,8 @@ class ConfigurationBuilderTests {
             + "], "
             + "launcher=Launcher["
             + "testEngineAutoRegistration=false, "
-            + "testExecutionListenerAutoRegistration=false"
+            + "testExecutionListenerAutoRegistration=false, "
+            + "additionalTestEngines=[de.sormuras.junit.platform.CustomTestEngine]"
             + "]"
             + "}";
     assertLinesMatch(lines(expected), lines(configuration.toString()));

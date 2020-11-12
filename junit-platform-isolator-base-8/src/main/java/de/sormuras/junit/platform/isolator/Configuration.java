@@ -18,6 +18,8 @@ import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -329,6 +331,7 @@ public class Configuration implements Serializable {
 
     boolean testEngineAutoRegistration = true;
     boolean testExecutionListenerAutoRegistration = true;
+    Collection<String> additionalTestEngines = new ArrayList<>();
 
     private Launcher() {}
 
@@ -340,19 +343,24 @@ public class Configuration implements Serializable {
       return testExecutionListenerAutoRegistration;
     }
 
+    public Collection<String> getAdditionalTestEngines() {
+      return additionalTestEngines;
+    }
+
     @Override
     public boolean equals(Object o) {
       if (this == o) return true;
       if (!(o instanceof Launcher)) return false;
       Launcher launcher = (Launcher) o;
       return testEngineAutoRegistration == launcher.testEngineAutoRegistration
-          && testExecutionListenerAutoRegistration
-              == launcher.testExecutionListenerAutoRegistration;
+          && testExecutionListenerAutoRegistration == launcher.testExecutionListenerAutoRegistration
+          && additionalTestEngines.equals(((Launcher) o).additionalTestEngines);
     }
 
     @Override
     public int hashCode() {
-      return Objects.hash(testEngineAutoRegistration, testExecutionListenerAutoRegistration);
+      return Objects.hash(
+          testEngineAutoRegistration, testExecutionListenerAutoRegistration, additionalTestEngines);
     }
 
     @Override
@@ -360,6 +368,7 @@ public class Configuration implements Serializable {
       return new StringJoiner(", ", Launcher.class.getSimpleName() + "[", "]")
           .add("testEngineAutoRegistration=" + testEngineAutoRegistration)
           .add("testExecutionListenerAutoRegistration=" + testExecutionListenerAutoRegistration)
+          .add("additionalTestEngines=" + additionalTestEngines)
           .toString();
     }
   }

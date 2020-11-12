@@ -400,5 +400,11 @@ public class ConfigurationBuilder {
       configuration.launcher().testExecutionListenerAutoRegistration = enabled;
       return this;
     }
+
+    /** Collection of additional test engines. */
+    public LauncherBuilder setAdditionalTestEngines(Collection<String> additionalTestEngines) {
+      configuration.launcher().additionalTestEngines = additionalTestEngines;
+      return this;
+    }
   }
 }

@@ -17,7 +17,7 @@ import java.util.function.UnaryOperator;
 /** Maven artifact version defaults. */
 public enum Version {
   /** {@code isolator.version} */
-  ISOLATOR_VERSION(implementationVersion("1.0.0-SNAPSHOT"), ISOLATOR, ISOLATOR_WORKER),
+  ISOLATOR_VERSION(implementationVersion("1.0.0-M11"), ISOLATOR, ISOLATOR_WORKER),
 
   /** {@code junit.platform.version} */
   JUNIT_PLATFORM_VERSION("1.3.2", JUNIT_PLATFORM_COMMONS),

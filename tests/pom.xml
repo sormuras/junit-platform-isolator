@@ -6,7 +6,7 @@
     <parent>
         <groupId>de.sormuras.junit</groupId>
         <artifactId>junit-platform-isolator-root</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>1.0.0-M11</version>
     </parent>
 
     <artifactId>tests</artifactId>

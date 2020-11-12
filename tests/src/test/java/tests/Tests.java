@@ -78,7 +78,7 @@ class Tests {
       var source = Files.readString(path);
       var target =
           source
-              .replaceAll("@project.version@", "1.0.0-SNAPSHOT")
+              .replaceAll("@project.version@", "1.0.0-M11")
               .replaceAll("@junit.jupiter.version@", "5.3.2");
       Files.writeString(path, target);
     } catch (IOException e) {

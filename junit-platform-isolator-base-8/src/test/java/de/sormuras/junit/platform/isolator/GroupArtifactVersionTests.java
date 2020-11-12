@@ -53,7 +53,7 @@ class GroupArtifactVersionTests {
   void passingNullAsVersionToCreateArtifactVersionMap() {
     Map<String, String> map = Version.buildMap(__ -> null);
     assertEquals(SIZE, map.size(), "map=" + map);
-    assertEquals("1.0.0-SNAPSHOT", map.get("isolator.version"));
+    assertEquals("1.0.0-M11", map.get("isolator.version"));
     assertEquals("1.3.2", map.get("junit.platform.version"));
     assertEquals("5.3.2", map.get("junit.jupiter.version"));
     assertEquals("5.3.2", map.get("junit.vintage.version"));

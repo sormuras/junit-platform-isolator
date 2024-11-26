@@ -17,16 +17,16 @@ import java.util.function.UnaryOperator;
 /** Maven artifact version defaults. */
 public enum Version {
   /** {@code isolator.version} */
-  ISOLATOR_VERSION(implementationVersion("1.0.0-SNAPSHOT"), ISOLATOR, ISOLATOR_WORKER),
+  ISOLATOR_VERSION(implementationVersion("1.0.0"), ISOLATOR, ISOLATOR_WORKER),
 
   /** {@code junit.platform.version} */
-  JUNIT_PLATFORM_VERSION("1.3.2", JUNIT_PLATFORM_COMMONS),
+  JUNIT_PLATFORM_VERSION("1.11.3", JUNIT_PLATFORM_COMMONS),
 
   /** {@code junit.jupiter.version} */
-  JUNIT_JUPITER_VERSION("5.3.2", JUNIT_JUPITER_API, JUNIT_JUPITER_ENGINE),
+  JUNIT_JUPITER_VERSION("5.11.3", JUNIT_JUPITER_API, JUNIT_JUPITER_ENGINE),
 
   /** {@code junit.vintage.version} */
-  JUNIT_VINTAGE_VERSION("5.3.2", JUNIT_VINTAGE_ENGINE);
+  JUNIT_VINTAGE_VERSION("5.11.3", JUNIT_VINTAGE_ENGINE);
 
   /** createArtifactVersionMap */
   public static Map<String, String> buildMap(UnaryOperator<String> versionOperator) {

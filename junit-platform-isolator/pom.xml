@@ -6,11 +6,14 @@
     <parent>
         <groupId>de.sormuras.junit</groupId>
         <artifactId>junit-platform-isolator-root</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>1.0.0</version>
     </parent>
 
     <artifactId>junit-platform-isolator</artifactId>
 
+    <name>JUnit Platform Isolator</name>
+    <description>Launch JUnit Platform In Isolation</description>
+    <url>https://github.com/sormuras/junit-platform-isolator</url>
     <properties>
         <jar.file.name>${project.artifactId}-${project.version}.jar</jar.file.name>
     </properties>
@@ -39,10 +42,6 @@
 
     <build>
         <plugins>
-            <plugin>
-                <groupId>com.coveo</groupId>
-                <artifactId>fmt-maven-plugin</artifactId>
-            </plugin>
             <plugin>
                 <artifactId>maven-clean-plugin</artifactId>
                 <executions>
